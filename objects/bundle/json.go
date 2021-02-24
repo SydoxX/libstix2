@@ -6,7 +6,9 @@
 package bundle
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 
 	"github.com/avast/libstix2/objects"
@@ -215,4 +217,13 @@ func (o *Bundle) EncodeToString() (string, error) {
 		return "", err
 	}
 	return string(data), nil
+}
+
+func (o *Bundle) UnmarshalJSON(data []byte) error {
+	b, err := Decode(bytes.NewReader(data))
+	if len(err) != 0 {
+		return fmt.Errorf("%v", err)
+	}
+	*o = *b
+	return nil
 }
