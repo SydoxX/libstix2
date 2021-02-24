@@ -5,7 +5,7 @@
 
 package apiroot
 
-import "github.com/freetaxii/libstix2/resources"
+import "github.com/avast/libstix2/resources"
 
 // ----------------------------------------------------------------------
 // Public Methods - APIRoot

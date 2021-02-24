@@ -8,7 +8,7 @@ package bundle
 import (
 	"encoding/json"
 
-	"github.com/freetaxii/libstix2/objects"
+	"github.com/avast/libstix2/objects"
 )
 
 // ----------------------------------------------------------------------

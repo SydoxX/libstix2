@@ -13,11 +13,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/freetaxii/libstix2/defs"
-	"github.com/freetaxii/libstix2/resources/collections"
-	"github.com/freetaxii/libstix2/resources/envelope"
-	"github.com/freetaxii/libstix2/resources/versions"
-	"github.com/freetaxii/libstix2/stixid"
+	"github.com/avast/libstix2/defs"
+	"github.com/avast/libstix2/resources/collections"
+	"github.com/avast/libstix2/resources/envelope"
+	"github.com/avast/libstix2/resources/versions"
+	"github.com/avast/libstix2/stixid"
 )
 
 // ----------------------------------------------------------------------

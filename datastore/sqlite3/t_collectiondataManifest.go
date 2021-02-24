@@ -11,11 +11,11 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/freetaxii/libstix2/defs"
-	"github.com/freetaxii/libstix2/resources/collections"
-	"github.com/freetaxii/libstix2/resources/manifest"
-	"github.com/freetaxii/libstix2/stixid"
-	"github.com/freetaxii/libstix2/timestamp"
+	"github.com/avast/libstix2/defs"
+	"github.com/avast/libstix2/resources/collections"
+	"github.com/avast/libstix2/resources/manifest"
+	"github.com/avast/libstix2/stixid"
+	"github.com/avast/libstix2/timestamp"
 )
 
 // ----------------------------------------------------------------------

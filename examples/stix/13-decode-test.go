@@ -9,8 +9,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/freetaxii/libstix2/objects"
-	"github.com/freetaxii/libstix2/objects/bundle"
+	"github.com/avast/libstix2/objects"
+	"github.com/avast/libstix2/objects/bundle"
 	"github.com/gologme/log"
 )
 

@@ -1,10 +1,10 @@
 # FreeTAXII/libstix2
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/freetaxii/libstix2)](https://goreportcard.com/report/github.com/freetaxii/libstix2) [![GoDoc](https://godoc.org/github.com/freetaxii/libstix2?status.png)](https://godoc.org/github.com/freetaxii/libstix2)
+[![Go Report Card](https://goreportcard.com/badge/github.com/avast/libstix2)](https://goreportcard.com/report/github.com/avast/libstix2) [![GoDoc](https://godoc.org/github.com/avast/libstix2?status.png)](https://godoc.org/github.com/avast/libstix2)
 
-libstix2 an API for generating JSON based STIX objects and TAXII messages with 
-the Go (Golang) programming language. Please see the examples directory and the 
-README files in each of the sub packages for more information. This API is built 
+libstix2 an API for generating JSON based STIX objects and TAXII messages with
+the Go (Golang) programming language. Please see the examples directory and the
+README files in each of the sub packages for more information. This API is built
 to support STIX 2.x and TAXII 2.x.
 
 ## Version
@@ -15,7 +15,7 @@ to support STIX 2.x and TAXII 2.x.
 This package can be installed with the go get command:
 
 ```
-go get github.com/freetaxii/libstix2
+go get github.com/avast/libstix2
 ```
 
 ## Special Thanks
@@ -95,17 +95,17 @@ Datastore
 
 ## Naming Conventions
 
-While Go does not require getters and setters, setters are used in libstix2 to enable validation and verification checks. All setters in libstix2 return an error type, even if they currently just return “nil”. This will ensure that the API will not change if/when additional validation / verification checks are added in the future. 
+While Go does not require getters and setters, setters are used in libstix2 to enable validation and verification checks. All setters in libstix2 return an error type, even if they currently just return “nil”. This will ensure that the API will not change if/when additional validation / verification checks are added in the future.
 
 Libstix2 uses the following naming conventions for methods on objects and resources.
 
-* Methods that setup / create a new object have a name of "New" or "New"+ object type. These constructors return a pointer to the object. 
+* Methods that setup / create a new object have a name of "New" or "New"+ object type. These constructors return a pointer to the object.
 
 * Methods that are setting a value have a name of “Set” + the property name. Example: “SetConfidence” is used for setting a value on the Confidence property.
 
 * Methods that are getting a value have a name of “Get” + the property name. Example: “GetConfidence” is used for getting the value stored in the Confidence property.
 
-* Methods that take in a value and add that value to a slice have a name of “Add” + the property name in the singular. Example: “AddLabel” is used to add a sting label to the labels property. 
+* Methods that take in a value and add that value to a slice have a name of “Add” + the property name in the singular. Example: “AddLabel” is used to add a sting label to the labels property.
 
 * Methods that take in an object and add that object to a slice have a name of “Add” + the object type in the singular. Example: “AddManifestEntry” is used to add a Manifest Entry to the Objects slice in the Manifest resource. It is important to note that these methods take in a pointer to the object instead of a copy of the object itself. Some examples with full signatures:
 
@@ -139,4 +139,3 @@ This is free software, licensed under the Apache License, Version 2.0. [Read thi
 ## Copyright
 
 Copyright 2015-2020 Bret Jordan, All rights reserved.
-

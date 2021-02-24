@@ -9,14 +9,14 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/freetaxii/libstix2/objects/bundle"
-	"github.com/freetaxii/libstix2/objects/campaign"
-	"github.com/freetaxii/libstix2/objects/indicator"
-	"github.com/freetaxii/libstix2/objects/infrastructure"
-	"github.com/freetaxii/libstix2/objects/malware"
-	"github.com/freetaxii/libstix2/objects/observeddata"
-	"github.com/freetaxii/libstix2/objects/relationship"
-	"github.com/freetaxii/libstix2/objects/sighting"
+	"github.com/avast/libstix2/objects/bundle"
+	"github.com/avast/libstix2/objects/campaign"
+	"github.com/avast/libstix2/objects/indicator"
+	"github.com/avast/libstix2/objects/infrastructure"
+	"github.com/avast/libstix2/objects/malware"
+	"github.com/avast/libstix2/objects/observeddata"
+	"github.com/avast/libstix2/objects/relationship"
+	"github.com/avast/libstix2/objects/sighting"
 )
 
 func main() {

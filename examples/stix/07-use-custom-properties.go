@@ -9,7 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/freetaxii/libstix2/objects/attackpattern"
+	"github.com/avast/libstix2/objects/attackpattern"
 )
 
 type myCustomAttackPattern struct {

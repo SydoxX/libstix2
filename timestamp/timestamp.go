@@ -10,7 +10,7 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/freetaxii/libstix2/defs"
+	"github.com/avast/libstix2/defs"
 )
 
 /*

@@ -6,8 +6,8 @@
 package report
 
 import (
-	"github.com/freetaxii/libstix2/objects"
-	"github.com/freetaxii/libstix2/objects/properties"
+	"github.com/avast/libstix2/objects"
+	"github.com/avast/libstix2/objects/properties"
 )
 
 // ----------------------------------------------------------------------

@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/freetaxii/libstix2/timestamp"
+	"github.com/avast/libstix2/timestamp"
 )
 
 // ----------------------------------------------------------------------

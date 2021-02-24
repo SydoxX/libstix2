@@ -10,9 +10,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/freetaxii/libstix2/datastore"
-	"github.com/freetaxii/libstix2/datastore/sqlite3"
-	"github.com/freetaxii/libstix2/objects/indicator"
+	"github.com/avast/libstix2/datastore"
+	"github.com/avast/libstix2/datastore/sqlite3"
+	"github.com/avast/libstix2/objects/indicator"
 	"github.com/gologme/log"
 	"github.com/pborman/getopt"
 )
