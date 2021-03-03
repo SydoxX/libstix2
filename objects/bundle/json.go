@@ -52,8 +52,8 @@ func Decode(r io.Reader) (*Bundle, []error) {
 		return nil, allErrors
 	}
 
-	// Populate the ID just in case a client needs or wants it
-	b.SetID(rawBundle.GetID())
+	// Populate the Common properties
+	b.CommonObjectProperties = rawBundle.CommonObjectProperties
 
 	// Loop through all of the raw objects and decode them
 	for _, v := range rawBundle.Objects {
