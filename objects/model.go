@@ -145,5 +145,6 @@ basic properties and is called by the New() function from that object.
 func (o *CommonObjectProperties) InitBundle() error {
 	o.SetObjectType("bundle")
 	o.SetNewSTIXID("bundle")
+	o.SetSpecVersion(defs.STIX_VERSION)
 	return nil
 }
