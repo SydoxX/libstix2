@@ -25,6 +25,7 @@ type IPv4Addr struct {
 	properties.ValueProperty
 	properties.ResolvesToRefsProperty
 	properties.BelongsToRefsProperty
+	properties.ExtensionsProperty
 }
 
 /*
@@ -33,7 +34,7 @@ are unique to this object. This is used by the custom UnmarshalJSON for this
 object. It is defined here in this file to make it easy to keep in sync.
 */
 func (o *IPv4Addr) GetPropertyList() []string {
-	return []string{"value", "resolves_to_refs", "belongs_to_refs"}
+	return []string{"value", "resolves_to_refs", "belongs_to_refs", "extensions"}
 }
 
 // ----------------------------------------------------------------------

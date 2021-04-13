@@ -23,6 +23,7 @@ properties.
 type URLObject struct {
 	objects.CommonObjectProperties
 	properties.ValueProperty
+	properties.ExtensionsProperty
 }
 
 /*
@@ -31,7 +32,7 @@ are unique to this object. This is used by the custom UnmarshalJSON for this
 object. It is defined here in this file to make it easy to keep in sync.
 */
 func (o *URLObject) GetPropertyList() []string {
-	return []string{"value"}
+	return []string{"value", "extensions"}
 }
 
 // ----------------------------------------------------------------------

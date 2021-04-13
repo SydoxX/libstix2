@@ -27,6 +27,7 @@ type ObservedData struct {
 	NumberObserved int    `json:"number_observed,omitempty"`
 	Objects        string `json:"objects,omitempty"`
 	properties.ObjectRefsProperty
+	properties.ExtensionsProperty
 }
 
 /*
@@ -35,7 +36,7 @@ are unique to this object. This is used by the custom UnmarshalJSON for this
 object. It is defined here in this file to make it easy to keep in sync.
 */
 func (o *ObservedData) GetPropertyList() []string {
-	return []string{"first_observed", "last_observed", "number_observed", "objects", "object_refs"}
+	return []string{"first_observed", "last_observed", "number_observed", "objects", "object_refs", "extensions"}
 }
 
 // ----------------------------------------------------------------------

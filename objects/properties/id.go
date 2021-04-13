@@ -32,9 +32,9 @@ CreateSTIXUUID - This method takes in a string value representing a STIX
 object type and creates and returns a new ID based on the approved STIX UUIDv4
 format.
 */
-func (o *IDProperty) CreateSTIXUUID(s string) (string, error) {
+func (o *IDProperty) CreateSTIXUUID(objType string) (string, error) {
 	// TODO add check to validate that s is a valid type
-	id := s + "--" + uuid.New()
+	id := objType + "--" + uuid.New()
 	return id, nil
 }
 
@@ -62,9 +62,9 @@ SetNewSTIXID - This method takes in a string value representing a STIX object
 type and creates a new ID based on the approved STIX UUIDv4 format and update
 the id property for the object.
 */
-func (o *IDProperty) SetNewSTIXID(s string) error {
+func (o *IDProperty) SetNewSTIXID(objType string) error {
 	// TODO Add check to validate input value
-	o.ID, _ = o.CreateSTIXUUID(s)
+	o.ID, _ = o.CreateSTIXUUID(objType)
 	return nil
 }
 
