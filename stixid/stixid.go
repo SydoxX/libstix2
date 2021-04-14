@@ -6,8 +6,11 @@
 package stixid
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/google/uuid"
 
 	"github.com/avast/libstix2/objects"
 )
@@ -24,7 +27,7 @@ func ValidSTIXID(id string) bool {
 	}
 
 	// First check to see if the object type is valid, if not return false.
-	if valid := objects.ValidType(idparts[0]); valid == false {
+	if valid := objects.ValidObjectType(idparts[0]); valid == false {
 		// Short circuit if the STIX type part is wrong
 		return false
 	}
@@ -43,4 +46,8 @@ represents an actual UUIDv4 value.
 func ValidUUID(uuid string) bool {
 	r := regexp.MustCompile(`^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[8|9|aA|bB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}$`)
 	return r.MatchString(uuid)
+}
+
+func BuildId(objectType string, uuid uuid.UUID) string {
+	return fmt.Sprintf("%s--%s", objectType, uuid.String())
 }
