@@ -39,9 +39,9 @@ representing the name of the kill chain being used. The second value is a string
 value representing the phase name from that kill chain.
 */
 func (o *KillChainPhasesProperty) CreateKillChainPhase(name, phase string) error {
-	k, _ := o.newKillChainPhase()
-	k.SetName(name)
-	k.SetPhase(phase)
+	k := o.NewKillChainPhase()
+	k.PhaseName = phase
+	k.KillChainName = name
 	return nil
 }
 
@@ -53,39 +53,12 @@ func (o *KillChainPhasesProperty) CreateKillChainPhase(name, phase string) error
 newKillChainPhase - This method returns a reference to a slice location. This
 will enable the code to update an object located at that slice location.
 */
-func (o *KillChainPhasesProperty) newKillChainPhase() (*KillChainPhase, error) {
+func (o *KillChainPhasesProperty) NewKillChainPhase() *KillChainPhase {
 	var s KillChainPhase
-
-	// if o.KillChainPhases == nil {
-	// 	a := make([]KillChainPhase, 0)
-	// 	o.KillChainPhases = a
-	// }
 
 	positionThatAppendWillUse := len(o.KillChainPhases)
 	o.KillChainPhases = append(o.KillChainPhases, s)
-	return &o.KillChainPhases[positionThatAppendWillUse], nil
-}
-
-// ----------------------------------------------------------------------
-// Public Methods - KillChainPhase - Setters
-// ----------------------------------------------------------------------
-
-/*
-SetName - This method takes in a string value representing the name of a kill
-chain and updates the kill chain name property.
-*/
-func (o *KillChainPhase) SetName(s string) error {
-	o.KillChainName = s
-	return nil
-}
-
-/*
-SetPhase - This method takes in a string value representing the phase of a
-kill chain and updates the phase name property.
-*/
-func (o *KillChainPhase) SetPhase(s string) error {
-	o.PhaseName = s
-	return nil
+	return &o.KillChainPhases[positionThatAppendWillUse]
 }
 
 // ----------------------------------------------------------------------

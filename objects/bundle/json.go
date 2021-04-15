@@ -11,22 +11,9 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/avast/libstix2/objects"
-	"github.com/avast/libstix2/objects/attackpattern"
-	"github.com/avast/libstix2/objects/campaign"
-	"github.com/avast/libstix2/objects/courseofaction"
-	"github.com/avast/libstix2/objects/identity"
-	"github.com/avast/libstix2/objects/indicator"
-	"github.com/avast/libstix2/objects/infrastructure"
-	"github.com/avast/libstix2/objects/intrusionset"
-	"github.com/avast/libstix2/objects/malware"
-	"github.com/avast/libstix2/objects/observeddata"
-	"github.com/avast/libstix2/objects/relationship"
-	"github.com/avast/libstix2/objects/report"
-	"github.com/avast/libstix2/objects/sighting"
-	"github.com/avast/libstix2/objects/threatactor"
-	"github.com/avast/libstix2/objects/tool"
-	"github.com/avast/libstix2/objects/vulnerability"
+	"github.com/avast/libstix2/objects/factory"
+
+	_ "github.com/avast/libstix2/objects/factory/importall_except_bundle"
 )
 
 // ----------------------------------------------------------------------
@@ -57,129 +44,12 @@ func Decode(r io.Reader) (*Bundle, []error) {
 
 	// Loop through all of the raw objects and decode them
 	for _, v := range rawBundle.Objects {
-
-		// Make a first pass to decode just the object type value. Once we have this
-		// value we can easily make a second pass and decode the rest of the object.
-		stixtype, err := objects.DecodeType(v)
+		obj, err := factory.Decode(v)
 		if err != nil {
 			allErrors = append(allErrors, err)
-			return nil, allErrors
+			continue
 		}
-
-		switch stixtype {
-		case "attack-pattern":
-			obj, err := attackpattern.Decode(v)
-			if err != nil {
-				allErrors = append(allErrors, err)
-				continue
-			}
-			b.AddObject(obj)
-		case "campaign":
-			obj, err := campaign.Decode(v)
-			if err != nil {
-				allErrors = append(allErrors, err)
-				continue
-			}
-			b.AddObject(obj)
-		case "course-of-action":
-			obj, err := courseofaction.Decode(v)
-			if err != nil {
-				allErrors = append(allErrors, err)
-				continue
-			}
-			b.AddObject(obj)
-		case "identity":
-			obj, err := identity.Decode(v)
-			if err != nil {
-				allErrors = append(allErrors, err)
-				continue
-			}
-			b.AddObject(obj)
-		case "indicator":
-			obj, err := indicator.Decode(v)
-			if err != nil {
-				allErrors = append(allErrors, err)
-				continue
-			}
-			b.AddObject(obj)
-		case "infrastructure":
-			obj, err := infrastructure.Decode(v)
-			if err != nil {
-				allErrors = append(allErrors, err)
-				continue
-			}
-			b.AddObject(obj)
-		case "intrusion-set":
-			obj, err := intrusionset.Decode(v)
-			if err != nil {
-				allErrors = append(allErrors, err)
-				continue
-			}
-			b.AddObject(obj)
-		case "malware":
-			obj, err := malware.Decode(v)
-			if err != nil {
-				allErrors = append(allErrors, err)
-				continue
-			}
-			b.AddObject(obj)
-		case "observed-data":
-			obj, err := observeddata.Decode(v)
-			if err != nil {
-				allErrors = append(allErrors, err)
-				continue
-			}
-			b.AddObject(obj)
-		case "relationship":
-			obj, err := relationship.Decode(v)
-			if err != nil {
-				allErrors = append(allErrors, err)
-				continue
-			}
-			b.AddObject(obj)
-		case "report":
-			obj, err := report.Decode(v)
-			if err != nil {
-				allErrors = append(allErrors, err)
-				continue
-			}
-			b.AddObject(obj)
-		case "sighting":
-			obj, err := sighting.Decode(v)
-			if err != nil {
-				allErrors = append(allErrors, err)
-				continue
-			}
-			b.AddObject(obj)
-		case "threat-actor":
-			obj, err := threatactor.Decode(v)
-			if err != nil {
-				allErrors = append(allErrors, err)
-				continue
-			}
-			b.AddObject(obj)
-		case "tool":
-			obj, err := tool.Decode(v)
-			if err != nil {
-				allErrors = append(allErrors, err)
-				continue
-			}
-			b.AddObject(obj)
-		case "vulnerability":
-			obj, err := vulnerability.Decode(v)
-			if err != nil {
-				allErrors = append(allErrors, err)
-				continue
-			}
-			b.AddObject(obj)
-		default:
-			obj, err := objects.Decode(v)
-			if err != nil {
-				allErrors = append(allErrors, err)
-				continue
-			}
-			b.AddObject(obj)
-		}
+		b.AddObject(obj)
 	}
 
 	return &b, allErrors

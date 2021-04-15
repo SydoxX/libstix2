@@ -6,7 +6,11 @@
 package observeddata
 
 import (
+	"github.com/avast/libstix2/datatypes/timestamp"
+
 	"github.com/avast/libstix2/objects"
+	"github.com/avast/libstix2/objects/common"
+	"github.com/avast/libstix2/objects/factory"
 	"github.com/avast/libstix2/objects/properties"
 )
 
@@ -21,35 +25,51 @@ object. All of the methods not defined local to this type are inherited from the
 individual properties.
 */
 type ObservedData struct {
-	objects.CommonObjectProperties
-	FirstObserved  string `json:"first_observed,omitempty"`
-	LastObserved   string `json:"last_observed,omitempty"`
-	NumberObserved int    `json:"number_observed,omitempty"`
-	Objects        string `json:"objects,omitempty"`
+	common.CommonObjectProperties
+	FirstObserved  timestamp.Timestamp `json:"first_observed"`
+	LastObserved   timestamp.Timestamp `json:"last_observed"`
+	NumberObserved int                 `json:"number_observed"`
 	properties.ObjectRefsProperty
 	properties.ExtensionsProperty
+
+	// Deprecated: Objects is deprecated in Stix2.1
+	Objects map[string]interface{} `json:"objects,omitempty"`
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *ObservedData) GetPropertyList() []string {
-	return []string{"first_observed", "last_observed", "number_observed", "objects", "object_refs", "extensions"}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeObservedData, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX Observed Data object and return
-it as a pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *ObservedData {
 	var obj ObservedData
-	obj.InitSDO("observed-data")
+	obj.InitSDO(objects.TypeObservedData)
 	return &obj
+}
+
+func (o *ObservedData) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	if o.NumberObserved <= 0 {
+		errors = append(errors, objects.PropertyInvalid("number_observed", o.NumberObserved, "must be > 0"))
+	}
+
+	if len(o.ObjectRefs) != 0 && len(o.Objects) != 0 {
+		errors = append(errors, objects.PropertyInvalid("object", o, "only one of 'objects' and 'object_refs' can be present"))
+	}
+
+	if o.FirstObserved.IsZero() {
+		errors = append(errors, objects.PropertyMissing("first_observed"))
+	}
+
+	if o.LastObserved.IsZero() {
+		errors = append(errors, objects.PropertyMissing("last_observed"))
+	}
+
+	if err := timestamp.CheckRange(o.FirstObserved, o.LastObserved, "first_observed", "last_observed"); err != nil {
+		errors = append(errors, err)
+	}
+
+	return errors
 }

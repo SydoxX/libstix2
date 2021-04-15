@@ -20,30 +20,6 @@ type LangProperty struct {
 	Lang string `json:"lang,omitempty"`
 }
 
-// ----------------------------------------------------------------------
-// Public Methods - LangProperty - Setters
-// ----------------------------------------------------------------------
-
-/*
-SetLang - This method takes in a string value representing an ISO 639-2
-encoded language code as defined in RFC 5646 and updates the lang property.
-*/
-func (o *LangProperty) SetLang(s string) error {
-	o.Lang = s
-	return nil
-}
-
-/*
-GetLang - This method returns the current language code for a given object.
-*/
-func (o *LangProperty) GetLang() string {
-	return o.Lang
-}
-
-// ----------------------------------------------------------------------
-// Public Methods - LangProperty - Checks
-// ----------------------------------------------------------------------
-
 /*
 Compare - This method will compare two properties to make sure they are the
 same and will return a boolean, an integer that tracks the number of problems

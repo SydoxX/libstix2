@@ -7,6 +7,8 @@ package attackpattern
 
 import (
 	"github.com/avast/libstix2/objects"
+	"github.com/avast/libstix2/objects/common"
+	"github.com/avast/libstix2/objects/factory"
 	"github.com/avast/libstix2/objects/properties"
 )
 
@@ -21,33 +23,31 @@ object. All of the methods not defined local to this type are inherited from the
 individual properties.
 */
 type AttackPattern struct {
-	objects.CommonObjectProperties
+	common.CommonObjectProperties
 	properties.NameProperty
 	properties.DescriptionProperty
 	properties.AliasesProperty
 	properties.KillChainPhasesProperty
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *AttackPattern) GetPropertyList() []string {
-	return []string{"name", "description", "aliases", "kill_chain_phases"}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeAttackPattern, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX Attack Pattern object and return
-it as a pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *AttackPattern {
 	var obj AttackPattern
-	obj.InitSDO("attack-pattern")
+	obj.InitSDO(objects.TypeAttackPattern)
 	return &obj
+}
+
+func (o *AttackPattern) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	if err := o.NameProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	return errors
 }

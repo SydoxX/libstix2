@@ -8,7 +8,12 @@ package bundle
 import (
 	"encoding/json"
 
+	"github.com/avast/libstix2/objects/factory"
+
+	"github.com/avast/libstix2/defs"
 	"github.com/avast/libstix2/objects"
+
+	"github.com/avast/libstix2/objects/common"
 )
 
 // ----------------------------------------------------------------------
@@ -22,8 +27,14 @@ methods not defined local to this type are inherited from the individual
 properties.
 */
 type Bundle struct {
-	objects.CommonObjectProperties
-	Objects []objects.STIXObject `json:"objects,omitempty"`
+	common.CommonObjectProperties
+	Objects []common.STIXObject `json:"objects,omitempty"`
+}
+
+func init() {
+	factory.RegisterObjectCreator(objects.TypeBundle, func() common.STIXObject {
+		return New()
+	})
 }
 
 /*
@@ -31,7 +42,7 @@ bundleRawDecode - This type is used for decoding a STIX bundle since the
 Objects property needs special handling.
 */
 type bundleRawDecode struct {
-	objects.CommonObjectProperties
+	common.CommonObjectProperties
 	Objects []json.RawMessage `json:"objects,omitempty"`
 }
 
@@ -46,6 +57,20 @@ not have all of the fields that are common to a standard object.
 */
 func New() *Bundle {
 	var obj Bundle
-	obj.InitBundle()
+	obj.ObjectType = objects.TypeBundle
+	obj.SetNewSTIXID(objects.TypeBundle)
+	obj.SpecVersion = defs.STIX_VERSION
 	return &obj
+}
+
+func (o *Bundle) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+	for _, obj := range o.Objects {
+		errors = append(errors, obj.Valid()...)
+	}
+	return errors
+}
+
+func (o *Bundle) AddObject(i common.STIXObject) {
+	o.Objects = append(o.Objects, i)
 }

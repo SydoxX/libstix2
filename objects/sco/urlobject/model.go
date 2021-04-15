@@ -7,6 +7,8 @@ package urlobject
 
 import (
 	"github.com/avast/libstix2/objects"
+	"github.com/avast/libstix2/objects/common"
+	"github.com/avast/libstix2/objects/factory"
 	"github.com/avast/libstix2/objects/properties"
 )
 
@@ -21,31 +23,29 @@ methods not defined local to this type are inherited from the individual
 properties.
 */
 type URLObject struct {
-	objects.CommonObjectProperties
-	properties.ValueProperty
+	common.CommonObjectProperties
+	properties.ValueProperty `idcontrib:"1"`
 	properties.ExtensionsProperty
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *URLObject) GetPropertyList() []string {
-	return []string{"value", "extensions"}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeURL, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX URL SCO and return it as a
-pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *URLObject {
 	var obj URLObject
-	obj.InitSCO("url")
+	obj.InitSCO(objects.TypeURL)
 	return &obj
+}
+
+func (o *URLObject) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	if err := o.ValueProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	return errors
 }

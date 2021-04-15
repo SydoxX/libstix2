@@ -3,7 +3,9 @@ package avast
 import (
 	"time"
 
-	"github.com/avast/libstix2/stixid"
+	"github.com/avast/libstix2/datatypes/timestamp"
+
+	"github.com/avast/libstix2/datatypes/stixid"
 
 	"github.com/avast/libstix2/objects/identity"
 	"github.com/google/uuid"
@@ -21,11 +23,11 @@ var (
 
 func Identity() *identity.Identity {
 	idt := identity.New()
-	idt.SetID(IdentityId)
-	idt.SetCreatedByRef(IdentityId)
-	idt.SetCreated(IdentityCreated)
-	idt.SetModified(IdentityCreated)
-	idt.SetName(OrganizationNane)
-	idt.SetIdentityClass("organization")
+	idt.ID = (IdentityId)
+	idt.CreatedByRef = (IdentityId)
+	idt.Created = timestamp.New(IdentityCreated)
+	idt.Modified = timestamp.New(IdentityCreated)
+	idt.Name = OrganizationNane
+	idt.IdentityClass = "organization"
 	return idt
 }

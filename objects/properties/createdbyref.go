@@ -19,31 +19,6 @@ type CreatedByRefProperty struct {
 	CreatedByRef string `json:"created_by_ref,omitempty"`
 }
 
-// ----------------------------------------------------------------------
-// Public Methods - CreatedByRefProperty
-// ----------------------------------------------------------------------
-
-/*
-SetCreatedByRef - This method takes in a string value representing a STIX
-identifier and updates the Created By Ref property.
-*/
-func (o *CreatedByRefProperty) SetCreatedByRef(s string) error {
-	o.CreatedByRef = s
-	return nil
-}
-
-/*
-GetCreatedByRef - This method returns the STIX identifier for the identity
-that created this object.
-*/
-func (o *CreatedByRefProperty) GetCreatedByRef() string {
-	return o.CreatedByRef
-}
-
-// ----------------------------------------------------------------------
-// Public Methods - CreatedByRefProperty - Checks
-// ----------------------------------------------------------------------
-
 /*
 Compare - This method will compare two properties to make sure they are the
 same and will return a boolean, an integer that tracks the number of problems

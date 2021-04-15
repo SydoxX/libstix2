@@ -41,70 +41,12 @@ NewExternalReference - This method creates a new external reference and
 returns a reference to a slice location. This will enable the code to update an
 object located at that slice location.
 */
-func (o *ExternalReferencesProperty) NewExternalReference() (*ExternalReference, error) {
+func (o *ExternalReferencesProperty) NewExternalReference() *ExternalReference {
 	var s ExternalReference
-
-	// if o.ExternalReferences == nil {
-	// 	a := make([]ExternalReference, 0)
-	// 	o.ExternalReferences = a
-	// }
 
 	positionThatAppendWillUse := len(o.ExternalReferences)
 	o.ExternalReferences = append(o.ExternalReferences, s)
-	return &o.ExternalReferences[positionThatAppendWillUse], nil
-}
-
-// ----------------------------------------------------------------------
-// Public Methods - ExternalReference - Setters
-// ----------------------------------------------------------------------
-
-/*
-SetSourceName - This method takes in a string value representing the name of
-a source for an external reference and updates the source name property.
-*/
-func (o *ExternalReference) SetSourceName(s string) error {
-	o.SourceName = s
-	return nil
-}
-
-/*
-GetSourceName - This method will return the source name.
-*/
-func (o *ExternalReference) GetSourceName() string {
-	return o.SourceName
-}
-
-/*
-SetDescription - This method takes in a string value representing a text
-description and updates the description property.
-*/
-func (o *ExternalReference) SetDescription(s string) error {
-	o.Description = s
-	return nil
-}
-
-/*
-GetDescription - This method returns the description for an object as a
-string.
-*/
-func (o *ExternalReference) GetDescription() string {
-	return o.Description
-}
-
-/*
-SetURL - This method takes in a string value representing a URL location of a
-source for an external reference and updates the URL property.
-*/
-func (o *ExternalReference) SetURL(s string) error {
-	o.URL = s
-	return nil
-}
-
-/*
-GetURL - This method returns the URL for this external reference.
-*/
-func (o *ExternalReference) GetURL() string {
-	return o.URL
+	return &o.ExternalReferences[positionThatAppendWillUse]
 }
 
 /*
@@ -113,30 +55,12 @@ The first is a string value representing a hash type from the STIX hashes
 vocabulary. The second is a string value representing the actual hash of the
 content from the remote external reference.
 */
-func (o *ExternalReference) AddHash(k, v string) error {
+func (o *ExternalReference) AddHash(k, v string) {
 	if o.Hashes == nil {
 		m := make(map[string]string, 0)
 		o.Hashes = m
 	}
 	o.Hashes[k] = v
-	return nil
-}
-
-/*
-SetExternalID - This method takes in a string value representing an general
-purpose id in a remote system for the source of this external reference and
-updates the external id property.
-*/
-func (o *ExternalReference) SetExternalID(s string) error {
-	o.ExternalID = s
-	return nil
-}
-
-/*
-GetExternalID - This method returns the external id for this reference.
-*/
-func (o *ExternalReference) GetExternalID() string {
-	return o.ExternalID
 }
 
 // ----------------------------------------------------------------------

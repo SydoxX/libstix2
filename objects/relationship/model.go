@@ -6,7 +6,10 @@
 package relationship
 
 import (
+	"github.com/avast/libstix2/datatypes/timestamp"
 	"github.com/avast/libstix2/objects"
+	"github.com/avast/libstix2/objects/common"
+	"github.com/avast/libstix2/objects/factory"
 	"github.com/avast/libstix2/objects/properties"
 )
 
@@ -21,35 +24,45 @@ All of the methods not defined local to this type are inherited from the
 individual properties.
 */
 type Relationship struct {
-	objects.CommonObjectProperties
-	RelationshipType string `json:"relationship_type,omitempty"`
+	common.CommonObjectProperties
+	RelationshipType string `json:"relationship_type"`
 	properties.DescriptionProperty
-	SourceRef string `json:"source_ref,omitempty"`
-	TargetRef string `json:"target_ref,omitempty"`
-	StartTime string `json:"start_time,omitempty"`
-	StopTime  string `json:"stop_time,omitempty"`
+	SourceRef string              `json:"source_ref"`
+	TargetRef string              `json:"target_ref"`
+	StartTime timestamp.Timestamp `json:"start_time,omitempty"`
+	StopTime  timestamp.Timestamp `json:"stop_time,omitempty"`
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *Relationship) GetPropertyList() []string {
-	return []string{"relationship_type", "description", "source_ref", "target_ref", "start_time", "stop_time"}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeRelationship, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX Relationship object and return
-it as a pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *Relationship {
 	var obj Relationship
-	obj.InitSRO("relationship")
+	obj.InitSRO(objects.TypeRelationship)
 	return &obj
+}
+
+func (o *Relationship) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	if o.RelationshipType == "" {
+		errors = append(errors, objects.PropertyMissing("relationship_type"))
+	}
+
+	if o.SourceRef == "" {
+		errors = append(errors, objects.PropertyMissing("source_ref"))
+	}
+
+	if o.TargetRef == "" {
+		errors = append(errors, objects.PropertyMissing("target_ref"))
+	}
+
+	if err := timestamp.CheckRange(o.StartTime, o.StopTime, "start_time", "stop_time"); err != nil {
+		errors = append(errors, err)
+	}
+
+	return errors
 }

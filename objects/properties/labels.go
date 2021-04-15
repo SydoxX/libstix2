@@ -7,8 +7,6 @@ package properties
 
 import (
 	"fmt"
-
-	"github.com/avast/libstix2/resources"
 )
 
 // ----------------------------------------------------------------------
@@ -22,19 +20,6 @@ the labels property.
 */
 type LabelsProperty struct {
 	Labels []string `json:"labels,omitempty"`
-}
-
-// ----------------------------------------------------------------------
-// Public Methods - LabelsProperty - Setters
-// ----------------------------------------------------------------------
-
-/*
-AddLabels - This method takes in a string value, a comma separated list of
-string values, or a slice of string values that all representing a
-label and adds it to the labels property.
-*/
-func (o *LabelsProperty) AddLabels(values interface{}) error {
-	return resources.AddValuesToList(&o.Labels, values)
 }
 
 // ----------------------------------------------------------------------

@@ -6,7 +6,13 @@
 package indicator
 
 import (
+	"github.com/avast/libstix2/datatypes/timestamp"
+
+	"github.com/avast/libstix2/vocabs"
+
 	"github.com/avast/libstix2/objects"
+	"github.com/avast/libstix2/objects/common"
+	"github.com/avast/libstix2/objects/factory"
 	"github.com/avast/libstix2/objects/properties"
 )
 
@@ -21,38 +27,57 @@ the methods not defined local to this type are inherited from the individual
 properties.
 */
 type Indicator struct {
-	objects.CommonObjectProperties
+	common.CommonObjectProperties
 	properties.NameProperty
 	properties.DescriptionProperty
-	IndicatorTypes []string `json:"indicator_types,omitempty"`
-	Pattern        string   `json:"pattern,omitempty"`
-	PatternType    string   `json:"pattern_type,omitempty"`
-	PatternVersion string   `json:"pattern_version,omitempty"`
-	ValidFrom      string   `json:"valid_from,omitempty"`
-	ValidUntil     string   `json:"valid_until,omitempty"`
+
+	IndicatorTypes []vocabs.IndicatorType `json:"indicator_types"`
+	Pattern        string                 `json:"pattern"`
+	PatternType    vocabs.PatternType     `json:"pattern_type"`
+	PatternVersion string                 `json:"pattern_version,omitempty"`
+	ValidFrom      timestamp.Timestamp    `json:"valid_from"`
+	ValidUntil     timestamp.Timestamp    `json:"valid_until,omitempty"`
 	properties.KillChainPhasesProperty
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *Indicator) GetPropertyList() []string {
-	return []string{"name", "description", "indicator_types", "pattern", "pattern_type", "pattern_version", "valid_from", "valid_until", "kill_chain_phases"}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeIndicator, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX Indicator object and return it as
-a pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *Indicator {
 	var obj Indicator
-	obj.InitSDO("indicator")
+	obj.InitSDO(objects.TypeIndicator)
 	return &obj
+}
+
+func (o *Indicator) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	if err := o.NameProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	if len(o.IndicatorTypes) == 0 {
+		errors = append(errors, objects.PropertyMissing("indicator_types"))
+	}
+
+	if len(o.Pattern) == 0 {
+		errors = append(errors, objects.PropertyMissing("pattern"))
+	}
+
+	if len(o.PatternType) == 0 {
+		errors = append(errors, objects.PropertyMissing("pattern_type"))
+	}
+
+	if o.ValidFrom.IsZero() {
+		errors = append(errors, objects.PropertyMissing("valid_from"))
+	}
+
+	if err := timestamp.CheckRange(o.ValidFrom, o.ValidUntil, "valid_from", "valid_to"); err != nil {
+		errors = append(errors, err)
+	}
+
+	return errors
 }

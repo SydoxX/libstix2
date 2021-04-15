@@ -8,7 +8,7 @@ package properties
 import (
 	"fmt"
 
-	"github.com/avast/libstix2/resources"
+	"github.com/avast/libstix2/objects"
 )
 
 // ----------------------------------------------------------------------
@@ -23,19 +23,6 @@ type ObjectRefsProperty struct {
 }
 
 // ----------------------------------------------------------------------
-// Public Methods - ObjectRefsProperty - Setters
-// ----------------------------------------------------------------------
-
-/*
-AddObjectRefs - This method takes in a string value, a comma separated list of
-string values, or a slice of string values that represents a alias and adds it
-to the object refs property.
-*/
-func (o *ObjectRefsProperty) AddObjectRefs(values interface{}) error {
-	return resources.AddValuesToList(&o.ObjectRefs, values)
-}
-
-// ----------------------------------------------------------------------
 // Public Methods - ObjectRefsProperty - Checks
 // ----------------------------------------------------------------------
 
@@ -45,18 +32,11 @@ object is present. It will return a boolean, an integer that tracks the number
 of problems found, and a slice of strings that contain the detailed results,
 whether good or bad.
 */
-func (o *ObjectRefsProperty) VerifyExists() (bool, int, []string) {
-	problemsFound := 0
-	resultDetails := make([]string, 1)
-
+func (o *ObjectRefsProperty) VerifyExists() error {
 	if len(o.ObjectRefs) == 0 {
-		problemsFound++
-		resultDetails[0] = fmt.Sprintf("-- The object refs property is required but missing")
-		return false, problemsFound, resultDetails
+		return objects.PropertyMissing("object_refs")
 	}
-
-	resultDetails[0] = fmt.Sprintf("++ The object refs property is required and is present")
-	return true, problemsFound, resultDetails
+	return nil
 }
 
 /*

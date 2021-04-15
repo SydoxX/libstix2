@@ -6,7 +6,11 @@
 package identity
 
 import (
+	"github.com/avast/libstix2/vocabs"
+
 	"github.com/avast/libstix2/objects"
+	"github.com/avast/libstix2/objects/common"
+	"github.com/avast/libstix2/objects/factory"
 	"github.com/avast/libstix2/objects/properties"
 )
 
@@ -21,22 +25,20 @@ object. All of the methods not defined local to this type are inherited from the
 individual properties.
 */
 type Identity struct {
-	objects.CommonObjectProperties
+	common.CommonObjectProperties
 	properties.NameProperty
 	properties.DescriptionProperty
 	properties.RolesProperty
-	IdentityClass      string   `json:"identity_class,omitempty"`
-	Sectors            []string `json:"sectors,omitempty"`
-	ContactInformation string   `json:"contact_information,omitempty"`
+
+	IdentityClass      vocabs.IdentityClass    `json:"identity_class"`
+	Sectors            []vocabs.IndustrySector `json:"sectors,omitempty"`
+	ContactInformation string                  `json:"contact_information,omitempty"`
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *Identity) GetPropertyList() []string {
-	return []string{"name", "description", "roles", "identity_class", "sectors", "contact_information"}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeIdentity, func() common.STIXObject {
+		return New()
+	})
 }
 
 // ----------------------------------------------------------------------
@@ -49,6 +51,20 @@ pointer.
 */
 func New() *Identity {
 	var obj Identity
-	obj.InitSDO("identity")
+	obj.InitSDO(objects.TypeIdentity)
 	return &obj
+}
+
+func (o *Identity) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	if err := o.NameProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	if o.IdentityClass == "" {
+		errors = append(errors, objects.PropertyMissing("identity_class"))
+	}
+
+	return errors
 }

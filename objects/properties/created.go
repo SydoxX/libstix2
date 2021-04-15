@@ -8,7 +8,9 @@ package properties
 import (
 	"fmt"
 
-	"github.com/avast/libstix2/timestamp"
+	"github.com/avast/libstix2/objects"
+
+	timestamp2 "github.com/avast/libstix2/datatypes/timestamp"
 )
 
 // ----------------------------------------------------------------------
@@ -20,44 +22,8 @@ CreatedProperty - A property used by all STIX objects that captures the date
 and time that the object was created.
 */
 type CreatedProperty struct {
-	Created string `json:"created,omitempty"`
+	Created timestamp2.Timestamp `json:"created,omitempty"`
 }
-
-// ----------------------------------------------------------------------
-// Public Methods - CreatedProperty - Setters
-// ----------------------------------------------------------------------
-
-/*
-SetCreatedToCurrentTime - This methods sets the object created time to the
-current time
-*/
-func (o *CreatedProperty) SetCreatedToCurrentTime() error {
-	o.Created = timestamp.CurrentTime("milli")
-	return nil
-}
-
-/*
-SetCreated - This method takes in a timestamp in either time.Time or string
-format and updates the created property with it. The value is stored as a
-string, so if the value is in time.Time format, it will be converted to the
-correct STIX timestamp format.
-*/
-func (o *CreatedProperty) SetCreated(t interface{}) error {
-	ts, _ := timestamp.ToString(t, "milli")
-	o.Created = ts
-	return nil
-}
-
-/*
-GetCreated - This method will return the created timestamp as a string.
-*/
-func (o *CreatedProperty) GetCreated() string {
-	return o.Created
-}
-
-// ----------------------------------------------------------------------
-// Public Methods - CreatedProperty - Checks
-// ----------------------------------------------------------------------
 
 /*
 VerifyExists - This method will verify that the created property on an object
@@ -65,18 +31,11 @@ is present if required. It will return a boolean, an integer that tracks the
 number of problems found, and a slice of strings that contain the detailed
 results, whether good or bad.
 */
-func (o *CreatedProperty) VerifyExists() (bool, int, []string) {
-	problemsFound := 0
-	resultDetails := make([]string, 1)
-
-	if o.Created == "" {
-		problemsFound++
-		resultDetails[0] = fmt.Sprintf("-- The created property is required but missing")
-		return false, problemsFound, resultDetails
+func (o *CreatedProperty) VerifyExists() error {
+	if o.Created.IsZero() {
+		return objects.PropertyMissing("created")
 	}
-
-	resultDetails[0] = fmt.Sprintf("++ The created property is required and is present")
-	return true, problemsFound, resultDetails
+	return nil
 }
 
 /*
@@ -90,7 +49,7 @@ func (o *CreatedProperty) Compare(obj2 *CreatedProperty) (bool, int, []string) {
 	resultDetails := make([]string, 0)
 
 	// Check Created Value
-	if o.Created != obj2.Created {
+	if o.Created.Equal(obj2.Created.Time) {
 		problemsFound++
 		str := fmt.Sprintf("-- The created dates do not match: %s | %s", o.Created, obj2.Created)
 		resultDetails = append(resultDetails, str)

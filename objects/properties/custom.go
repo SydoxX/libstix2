@@ -5,6 +5,8 @@
 
 package properties
 
+import "encoding/json"
+
 // ----------------------------------------------------------------------
 // Define Types
 // ----------------------------------------------------------------------
@@ -14,9 +16,13 @@ CustomProperties - A property used by all STIX objects that captures any
 custom properties. These are all stored in a map.
 */
 type CustomProperties struct {
-	Custom map[string][]byte `json:"custom,omitempty"`
+	Custom map[string]*json.RawMessage `json:"custom,omitempty"`
 }
 
 // ----------------------------------------------------------------------
 // Public Methods - CreatedProperty - Setters
 // ----------------------------------------------------------------------
+
+func (c *CustomProperties) SetCustomProperties(custom map[string]*json.RawMessage) {
+	c.Custom = custom
+}

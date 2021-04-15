@@ -17,23 +17,3 @@ serialization, but is used with some datastores.
 type DatastoreIDProperty struct {
 	DatastoreID int `json:"-"`
 }
-
-// ----------------------------------------------------------------------
-// Public Methods - DatastoreIDProperty - Setters
-// ----------------------------------------------------------------------
-
-/*
-SetDatastoreID - This method takes in a int representing the database ID and
-updates the DatastoreID property.
-*/
-func (o *DatastoreIDProperty) SetDatastoreID(i int) error {
-	o.DatastoreID = i
-	return nil
-}
-
-/*
-GetDatastoreID - This method returns the database ID value.
-*/
-func (o *DatastoreIDProperty) GetDatastoreID() int {
-	return o.DatastoreID
-}

@@ -6,8 +6,12 @@
 package threatactor
 
 import (
+	"github.com/avast/libstix2/datatypes/timestamp"
 	"github.com/avast/libstix2/objects"
+	"github.com/avast/libstix2/objects/common"
+	"github.com/avast/libstix2/objects/factory"
 	"github.com/avast/libstix2/objects/properties"
+	"github.com/avast/libstix2/vocabs"
 )
 
 // ----------------------------------------------------------------------
@@ -21,40 +25,46 @@ All of the methods not defined local to this type are inherited from the
 individual properties.
 */
 type ThreatActor struct {
-	objects.CommonObjectProperties
+	common.CommonObjectProperties
 	properties.NameProperty
 	properties.DescriptionProperty
-	ThreatActorTypes []string `json:"threat_actor_types,omitempty"`
+	ThreatActorTypes []vocabs.ThreatActorType `json:"threat_actor_types"`
 	properties.AliasesProperty
 	properties.SeenProperties
 	properties.RolesProperty
 	properties.GoalsProperty
-	Sophistication string `json:"sophistication,omitempty"`
+	Sophistication vocabs.ThreatActorSophistication `json:"sophistication,omitempty"`
 	properties.ResourceLevelProperty
 	properties.MotivationProperties
-	PersonalMotivations []string `json:"personal_motivations,omitempty"`
+	PersonalMotivations []vocabs.AttackMotivation `json:"personal_motivations,omitempty"`
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *ThreatActor) GetPropertyList() []string {
-	return []string{"name", "description", "threat_actor_types", "aliases", "first_seen", "last_seen", "roles", "goals", "sophistication", "resource_level", "primary_motivation", "secondary_motivations", "personal_motivations"}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeThreatActor, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX Threat Actor object and return it
-as a pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *ThreatActor {
 	var obj ThreatActor
-	obj.InitSDO("threat-actor")
+	obj.InitSDO(objects.TypeThreatActor)
 	return &obj
+}
+
+func (o *ThreatActor) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	if err := o.NameProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	if len(o.ThreatActorTypes) == 0 {
+		errors = append(errors, objects.PropertyMissing("threat_actor_types"))
+	}
+
+	if err := timestamp.CheckRange(o.FirstSeen, o.LastSeen, "fist_seen", "last_seen"); err != nil {
+		errors = append(errors, err)
+	}
+
+	return errors
 }

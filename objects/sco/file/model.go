@@ -1,7 +1,13 @@
 package file
 
 import (
+	"strings"
+
+	"github.com/avast/libstix2/datatypes/hex"
+	"github.com/avast/libstix2/datatypes/timestamp"
 	"github.com/avast/libstix2/objects"
+	"github.com/avast/libstix2/objects/common"
+	"github.com/avast/libstix2/objects/factory"
 	"github.com/avast/libstix2/objects/properties"
 )
 
@@ -13,40 +19,28 @@ type FileHashes struct {
 }
 
 type File struct {
-	objects.CommonObjectProperties
-	properties.ExtensionsProperty
+	common.CommonObjectProperties
 	properties.GranularMarking
+	properties.ExtensionsProperty `idcontrib:"1"`
+	properties.NameProperty       `idcontrib:"1"`
 
-	Hashes             *FileHashes `json:"hashes,omitempty"`
-	Size               int64       `json:"size,omitempty"`
-	Name               string      `json:"name,omitempty"`
-	NameEnc            string      `json:"name_enc,omitempty"`
-	MagicNumberHex     string      `json:"magic_number_hex,omitempty"`
-	MimeType           string      `json:"mime_type,omitempty"`
-	CTime              string      `json:"ctime,omitempty"`
-	MTime              string      `json:"mtime,omitempty"`
-	ATime              string      `json:"atime,omitempty"`
-	ParentDirectoryRef string      `json:"parent_directory_ref,omitempty"`
-	ContainsRef        []string    `json:"contains_ref,omitempty"`
-	ContentRef         string      `json:"content_ref,omitempty"`
+	Hashes             *FileHashes         `json:"hashes,omitempty" idcontrib:"1"`
+	Size               int64               `json:"size,omitempty"`
+	NameEnc            string              `json:"name_enc,omitempty"`
+	MagicNumberHex     hex.Hex             `json:"magic_number_hex,omitempty"`
+	MimeType           string              `json:"mime_type,omitempty"`
+	CTime              timestamp.Timestamp `json:"ctime,omitempty"`
+	MTime              timestamp.Timestamp `json:"mtime,omitempty"`
+	ATime              timestamp.Timestamp `json:"atime,omitempty"`
+	ParentDirectoryRef string              `json:"parent_directory_ref,omitempty"`
+	ContainsRef        []string            `json:"contains_ref,omitempty"`
+	ContentRef         string              `json:"content_ref,omitempty"`
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *File) GetPropertyList() []string {
-	return []string{
-		"lang", "marking_ref", "selectors", "extensions", "hashes", "size", "name", "name_enc", "magic_number_hex", "mime_type",
-		"ctime", "mtime", "atime", "parent_directory_ref", "contains_ref", "content_ref",
-	}
-}
-
-func (o *File) IdContributingProperties() []string {
-	return []string{
-		"hashes", "name", "extensions", "parent_directory_ref",
-	}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeFile, func() common.STIXObject {
+		return New()
+	})
 }
 
 func (o *File) FixupIdContributingProperties(properties map[string]interface{}) {
@@ -67,17 +61,26 @@ func (o *File) FixupIdContributingProperties(properties map[string]interface{}) 
 	delete(properties, "hashes")
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX Domain Name SCO and return it as a
-pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *File {
 	var obj File
-	obj.InitSCO("file")
+	obj.InitSCO(objects.TypeFile)
 	return &obj
+}
+
+func (o *File) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	if o.Size <= 0 {
+		errors = append(errors, objects.PropertyInvalid("size", o.Size, "Must be >= 0"))
+	}
+
+	if o.ParentDirectoryRef != "" && !strings.HasPrefix(o.ParentDirectoryRef, objects.TypeDirectory) {
+		errors = append(errors, objects.PropertyInvalid("parent_directory_ref", o.ParentDirectoryRef, "must be reference to a directory object."))
+	}
+
+	if o.ContentRef != "" && !strings.HasPrefix(o.ContentRef, objects.TypeArtifact) {
+		errors = append(errors, objects.PropertyInvalid("content_ref", o.ContentRef, "must be reference to an artifact object."))
+	}
+
+	return errors
 }

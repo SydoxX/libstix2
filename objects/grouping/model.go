@@ -7,7 +7,10 @@ package grouping
 
 import (
 	"github.com/avast/libstix2/objects"
+	"github.com/avast/libstix2/objects/common"
+	"github.com/avast/libstix2/objects/factory"
 	"github.com/avast/libstix2/objects/properties"
+	"github.com/avast/libstix2/vocabs"
 )
 
 // ----------------------------------------------------------------------
@@ -21,20 +24,18 @@ the methods not defined local to this type are inherited from the individual
 properties.
 */
 type Grouping struct {
-	objects.CommonObjectProperties
+	common.CommonObjectProperties
 	properties.NameProperty
 	properties.DescriptionProperty
-	Context string `json:"context,omitempty"`
 	properties.ObjectRefsProperty
+
+	Context vocabs.GroupingContext `json:"context"`
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *Grouping) GetPropertyList() []string {
-	return []string{"name", "description", "context", "object_refs"}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeGrouping, func() common.STIXObject {
+		return New()
+	})
 }
 
 // ----------------------------------------------------------------------
@@ -48,6 +49,20 @@ properties.
 */
 func New() *Grouping {
 	var obj Grouping
-	obj.InitSDO("grouping")
+	obj.InitSDO(objects.TypeGrouping)
 	return &obj
+}
+
+func (o *Grouping) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	if err := o.ObjectRefsProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	if o.Context == "" {
+		errors = append(errors, objects.PropertyMissing("context"))
+	}
+
+	return errors
 }

@@ -7,6 +7,8 @@ package properties
 
 import (
 	"fmt"
+
+	"github.com/avast/libstix2/objects"
 )
 
 // ----------------------------------------------------------------------
@@ -18,51 +20,22 @@ TypeProperty - A property used by one or more STIX objects that captures the
 STIX object type in string format.
 */
 type TypeProperty struct {
-	ObjectType string `json:"type,omitempty"`
-}
-
-// ----------------------------------------------------------------------
-// Public Methods - TypeProperty - Setters
-// ----------------------------------------------------------------------
-
-/*
-SetObjectType - This method takes in a string value representing a STIX
-object type and updates the type property.
-*/
-func (o *TypeProperty) SetObjectType(s string) error {
-	o.ObjectType = s
-	return nil
-}
-
-/*
-GetObjectType - This method returns the object type.
-*/
-func (o *TypeProperty) GetObjectType() string {
-	return o.ObjectType
+	ObjectType objects.ObjectType `json:"type"`
 }
 
 // ----------------------------------------------------------------------
 // Public Methods - TypeProperty - Checks
 // ----------------------------------------------------------------------
 
-/*
-VerifyExists - This method will verify that the type property on an object
-is present if required. It will return a boolean, an integer that tracks the
-number of problems found, and a slice of strings that contain the detailed
-results, whether good or bad.
-*/
-func (o *TypeProperty) VerifyExists() (bool, int, []string) {
-	problemsFound := 0
-	resultDetails := make([]string, 1)
-
+func (o *TypeProperty) VerifyExists() error {
 	if o.ObjectType == "" {
-		problemsFound++
-		resultDetails[0] = fmt.Sprintf("-- The type property is required but missing")
-		return false, problemsFound, resultDetails
+		return objects.PropertyMissing("type")
 	}
 
-	resultDetails[0] = fmt.Sprintf("++ The type property is required and is present")
-	return true, problemsFound, resultDetails
+	if !objects.IsValidObjectType(string(o.ObjectType)) {
+		return objects.PropertyInvalid("type", o.ObjectType, "unknown type")
+	}
+	return nil
 }
 
 /*

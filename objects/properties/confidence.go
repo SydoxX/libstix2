@@ -20,26 +20,6 @@ type ConfidenceProperty struct {
 }
 
 // ----------------------------------------------------------------------
-// Public Methods - ConfidenceProperty - Setters
-// ----------------------------------------------------------------------
-
-/*
-SetConfidence - This method takes in an integer representing a STIX
-confidence level 0-100 and updates the Confidence property.
-*/
-func (o *ConfidenceProperty) SetConfidence(i int) error {
-	o.Confidence = i
-	return nil
-}
-
-/*
-GetConfidence - This method returns the confidence value as an integer.
-*/
-func (o *ConfidenceProperty) GetConfidence() int {
-	return o.Confidence
-}
-
-// ----------------------------------------------------------------------
 // Public Methods - ConfidenceProperty - Checks
 // ----------------------------------------------------------------------
 

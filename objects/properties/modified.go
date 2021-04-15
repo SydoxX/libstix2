@@ -8,7 +8,9 @@ package properties
 import (
 	"fmt"
 
-	"github.com/avast/libstix2/timestamp"
+	"github.com/avast/libstix2/objects"
+
+	timestamp2 "github.com/avast/libstix2/datatypes/timestamp"
 )
 
 // ----------------------------------------------------------------------
@@ -21,65 +23,14 @@ and time that the object was modified or changed. This property effectively
 tracks the version of the object.
 */
 type ModifiedProperty struct {
-	Modified string `json:"modified,omitempty"`
+	Modified timestamp2.Timestamp `json:"modified,omitempty"`
 }
 
-// ----------------------------------------------------------------------
-// Public Methods - ModifiedProperty - Setters
-// ----------------------------------------------------------------------
-
-/*
-SetModifiedToCurrentTime - This methods sets the object created time to the
-current time
-*/
-func (o *ModifiedProperty) SetModifiedToCurrentTime() error {
-	o.Modified = timestamp.CurrentTime("milli")
-	return nil
-}
-
-/*
-SetModified - This method takes in a timestamp in either time.Time or string
-format and updates the modified property with it. The value is stored as a
-string, so if the value is in time.Time format, it will be converted to the
-correct STIX timestamp format.
-*/
-func (o *ModifiedProperty) SetModified(t interface{}) error {
-	ts, _ := timestamp.ToString(t, "milli")
-	o.Modified = ts
-	return nil
-}
-
-/*
-GetModified - This method will return the modified timestamp as a string. If
-the value is the same as the created timestamp, then this object is the first
-version of the object.
-*/
-func (o *ModifiedProperty) GetModified() string {
-	return o.Modified
-}
-
-// ----------------------------------------------------------------------
-// Public Methods - ModifiedProperty - Checks
-// ----------------------------------------------------------------------
-
-/*
-VerifyExists - This method will verify that the modified property on an object
-is present if required. It will return a boolean, an integer that tracks the
-number of problems found, and a slice of strings that contain the detailed
-results, whether good or bad.
-*/
-func (o *ModifiedProperty) VerifyExists() (bool, int, []string) {
-	problemsFound := 0
-	resultDetails := make([]string, 1)
-
-	if o.Modified == "" {
-		problemsFound++
-		resultDetails[0] = fmt.Sprintf("-- The modified property is required but missing")
-		return false, problemsFound, resultDetails
+func (o *ModifiedProperty) VerifyExists() error {
+	if o.Modified.IsZero() {
+		return objects.PropertyMissing("modified")
 	}
-
-	resultDetails[0] = fmt.Sprintf("++ The modified property is required and is present")
-	return true, problemsFound, resultDetails
+	return nil
 }
 
 /*
@@ -93,7 +44,7 @@ func (o *ModifiedProperty) Compare(obj2 *ModifiedProperty) (bool, int, []string)
 	resultDetails := make([]string, 0)
 
 	// Check Modified Value
-	if o.Modified != obj2.Modified {
+	if o.Modified.Equal(obj2.Modified.Time) {
 		problemsFound++
 		str := fmt.Sprintf("-- The modified dates do not match: %s | %s", o.Modified, obj2.Modified)
 		resultDetails = append(resultDetails, str)

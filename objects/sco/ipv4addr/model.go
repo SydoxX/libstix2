@@ -7,6 +7,8 @@ package ipv4addr
 
 import (
 	"github.com/avast/libstix2/objects"
+	"github.com/avast/libstix2/objects/common"
+	"github.com/avast/libstix2/objects/factory"
 	"github.com/avast/libstix2/objects/properties"
 )
 
@@ -21,33 +23,34 @@ All of the methods not defined local to this type are inherited from the
 individual properties.
 */
 type IPv4Addr struct {
-	objects.CommonObjectProperties
-	properties.ValueProperty
-	properties.ResolvesToRefsProperty
-	properties.BelongsToRefsProperty
+	common.CommonObjectProperties
+	properties.ValueProperty `idcontrib:"1"`
 	properties.ExtensionsProperty
+
+	// Deprecated
+	properties.ResolvesToRefsProperty
+	// Deprecated
+	properties.BelongsToRefsProperty
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *IPv4Addr) GetPropertyList() []string {
-	return []string{"value", "resolves_to_refs", "belongs_to_refs", "extensions"}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeIPv4Address, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX IPv4 Address SCO and return it as
-a pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *IPv4Addr {
 	var obj IPv4Addr
-	obj.InitSCO("ipv4-addr")
+	obj.InitSCO(objects.TypeIPv4Address)
 	return &obj
+}
+
+func (o *IPv4Addr) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	if err := o.ValueProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	return errors
 }

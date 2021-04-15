@@ -5,7 +5,11 @@
 
 package properties
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/avast/libstix2/objects"
+)
 
 // ----------------------------------------------------------------------
 // Define Types
@@ -20,26 +24,6 @@ type NameProperty struct {
 }
 
 // ----------------------------------------------------------------------
-// Public Methods - NameProperty - Setters
-// ----------------------------------------------------------------------
-
-/*
-SetName - This method takes in a string value representing a name of the
-object and updates the name property.
-*/
-func (o *NameProperty) SetName(s string) error {
-	o.Name = s
-	return nil
-}
-
-/*
-GetName - This method returns the current name of the object.
-*/
-func (o *NameProperty) GetName() string {
-	return o.Name
-}
-
-// ----------------------------------------------------------------------
 // Public Functions - NameProperty - Checks
 // ----------------------------------------------------------------------
 
@@ -49,18 +33,12 @@ is present. It will return a boolean, an integer that tracks the number of
 problems found, and a slice of strings that contain the detailed results,
 whether good or bad.
 */
-func (o *NameProperty) VerifyExists() (bool, int, []string) {
-	problemsFound := 0
-	resultDetails := make([]string, 1)
-
+func (o *NameProperty) VerifyExists() error {
 	if o.Name == "" {
-		problemsFound++
-		resultDetails[0] = fmt.Sprintf("-- The name property is required but missing")
-		return false, problemsFound, resultDetails
+		return objects.PropertyMissing("name")
 	}
 
-	resultDetails[0] = fmt.Sprintf("++ The name property is required and is present")
-	return true, problemsFound, resultDetails
+	return nil
 }
 
 /*

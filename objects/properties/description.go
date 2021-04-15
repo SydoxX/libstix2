@@ -20,27 +20,6 @@ type DescriptionProperty struct {
 }
 
 // ----------------------------------------------------------------------
-// Public Methods - DescriptionProperty - Setters
-// ----------------------------------------------------------------------
-
-/*
-SetDescription - This method takes in a string value representing a text
-description and updates the description property.
-*/
-func (o *DescriptionProperty) SetDescription(s string) error {
-	o.Description = s
-	return nil
-}
-
-/*
-GetDescription - This method returns the description for an object as a
-string.
-*/
-func (o *DescriptionProperty) GetDescription() string {
-	return o.Description
-}
-
-// ----------------------------------------------------------------------
 // Public Methods - DescriptionProperty - Checks
 // ----------------------------------------------------------------------
 

@@ -5,8 +5,6 @@
 
 package properties
 
-import "github.com/avast/libstix2/resources"
-
 // ----------------------------------------------------------------------
 // Define Types
 // ----------------------------------------------------------------------
@@ -17,17 +15,4 @@ list of goals that are part of the STIX object.
 */
 type GoalsProperty struct {
 	Goals []string `json:"goals,omitempty"`
-}
-
-// ----------------------------------------------------------------------
-// Public Methods - GoalsType - Setters
-// ----------------------------------------------------------------------
-
-/*
-AddGoals - This method takes in a string value, a comma separated list of
-string values, or a slice of string values that represents a goal and adds it to
-the goals property.
-*/
-func (o *GoalsProperty) AddGoals(values interface{}) error {
-	return resources.AddValuesToList(&o.Goals, values)
 }

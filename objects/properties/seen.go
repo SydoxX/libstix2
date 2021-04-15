@@ -5,7 +5,9 @@
 
 package properties
 
-import "github.com/avast/libstix2/timestamp"
+import (
+	"github.com/avast/libstix2/datatypes/timestamp"
+)
 
 // ----------------------------------------------------------------------
 // Define Types
@@ -17,52 +19,10 @@ captures the time that this object was first and last seen in STIX timestamp
 format.
 */
 type SeenProperties struct {
-	FirstSeen string `json:"first_seen,omitempty"`
-	LastSeen  string `json:"last_seen,omitempty"`
+	FirstSeen timestamp.Timestamp `json:"first_seen,omitempty"`
+	LastSeen  timestamp.Timestamp `json:"last_seen,omitempty"`
 }
 
-// ----------------------------------------------------------------------
-// Public Methods - SeenProperties
-// ----------------------------------------------------------------------
-
-/*
-SetFirstSeenToCurrentTime - This methods sets the first seen time to the
-current time
-*/
-func (o *SeenProperties) SetFirstSeenToCurrentTime() error {
-	o.FirstSeen = timestamp.CurrentTime("micro")
-	return nil
-}
-
-/*
-SetFirstSeen -  This method takes in a timestamp in either time.Time or
-string format and updates the first seen property with it. The value is stored
-as a string, so if the value is in time.Time format, it will be converted to the
-correct STIX timestamp format.
-*/
-func (o *SeenProperties) SetFirstSeen(t interface{}) error {
-	ts, _ := timestamp.ToString(t, "micro")
-	o.FirstSeen = ts
-	return nil
-}
-
-/*
-SetLastSeenToCurrentTime - This methods sets the first seen time to the
-current time
-*/
-func (o *SeenProperties) SetLastSeenToCurrentTime() error {
-	o.LastSeen = timestamp.CurrentTime("micro")
-	return nil
-}
-
-/*
-SetLastSeen -  This method takes in a time stamp in either time.Time or
-string format and updates the last seen property with it. The value is stored as
-a string, so if the value is in time.Time format, it will be converted to the
-correct STIX time stamp format.
-*/
-func (o *SeenProperties) SetLastSeen(t interface{}) error {
-	ts, _ := timestamp.ToString(t, "micro")
-	o.LastSeen = ts
-	return nil
+func (o *SeenProperties) Valid() error {
+	return timestamp.CheckRange(o.FirstSeen, o.LastSeen, "first_seen", "last_seen")
 }

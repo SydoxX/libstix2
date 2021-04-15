@@ -8,7 +8,10 @@ package properties
 import (
 	"fmt"
 
-	"github.com/pborman/uuid"
+	"github.com/avast/libstix2/datatypes/stixid"
+
+	"github.com/avast/libstix2/objects"
+	"github.com/google/uuid"
 )
 
 // ----------------------------------------------------------------------
@@ -32,29 +35,13 @@ CreateSTIXUUID - This method takes in a string value representing a STIX
 object type and creates and returns a new ID based on the approved STIX UUIDv4
 format.
 */
-func (o *IDProperty) CreateSTIXUUID(objType string) (string, error) {
-	// TODO add check to validate that s is a valid type
-	id := objType + "--" + uuid.New()
+func (o *IDProperty) CreateSTIXUUID(objType objects.ObjectType) (string, error) {
+	uuid4, err := uuid.NewRandom()
+	if err != nil {
+		return "", err
+	}
+	id := string(objType) + "--" + uuid4.String()
 	return id, nil
-}
-
-/*
-CreateTAXIIUUID - This method does not take in any parameters. It is used to
-create a new ID based on the approved TAXII UUIDv4 format.
-*/
-func (o *IDProperty) CreateTAXIIUUID() (string, error) {
-	id := uuid.New()
-	return id, nil
-}
-
-/*
-SetNewTAXIIID - This method does not take in any parameters. It is used to
-create a new ID based on the approved TAXII UUIDv4 format and assigns it to the
-ID property.
-*/
-func (o *IDProperty) SetNewTAXIIID() error {
-	o.ID, _ = o.CreateTAXIIUUID()
-	return nil
 }
 
 /*
@@ -62,26 +49,10 @@ SetNewSTIXID - This method takes in a string value representing a STIX object
 type and creates a new ID based on the approved STIX UUIDv4 format and update
 the id property for the object.
 */
-func (o *IDProperty) SetNewSTIXID(objType string) error {
+func (o *IDProperty) SetNewSTIXID(objType objects.ObjectType) error {
 	// TODO Add check to validate input value
 	o.ID, _ = o.CreateSTIXUUID(objType)
 	return nil
-}
-
-/*
-SetID - This method takes in a string value representing an existing STIX id
-and updates the id property for the object.
-*/
-func (o *IDProperty) SetID(s string) error {
-	o.ID = s
-	return nil
-}
-
-/*
-GetID - This method will return the id for a given STIX object.
-*/
-func (o *IDProperty) GetID() string {
-	return o.ID
 }
 
 // ----------------------------------------------------------------------
@@ -94,18 +65,11 @@ present if required. It will return a boolean, an integer that tracks the number
 of problems found, and a slice of strings that contain the detailed results,
 whether good or bad.
 */
-func (o *IDProperty) VerifyExists() (bool, int, []string) {
-	problemsFound := 0
-	resultDetails := make([]string, 1)
-
-	if o.ID == "" {
-		problemsFound++
-		resultDetails[0] = fmt.Sprintf("-- The id property is required but missing")
-		return false, problemsFound, resultDetails
+func (o *IDProperty) VerifyExists() error {
+	if !stixid.ValidSTIXID(o.ID) {
+		return objects.PropertyInvalid("id", o.ID, "invalid id format")
 	}
-
-	resultDetails[0] = fmt.Sprintf("++ The id property is required and is present")
-	return true, problemsFound, resultDetails
+	return nil
 }
 
 /*

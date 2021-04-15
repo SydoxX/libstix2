@@ -20,25 +20,6 @@ type RevokedProperty struct {
 }
 
 // ----------------------------------------------------------------------
-// Public Methods - RevokedProperty - Setters
-// ----------------------------------------------------------------------
-
-/*
-SetRevoked - This method sets the revoked boolean to true
-*/
-func (o *RevokedProperty) SetRevoked() error {
-	o.Revoked = true
-	return nil
-}
-
-/*
-GetRevoked - This method returns the current value of the revoked property.
-*/
-func (o *RevokedProperty) GetRevoked() bool {
-	return o.Revoked
-}
-
-// ----------------------------------------------------------------------
 // Public Methods - RevokedProperty - Checks
 // ----------------------------------------------------------------------
 
