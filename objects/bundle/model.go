@@ -7,6 +7,7 @@ package bundle
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/avast/libstix2/objects/factory"
 
@@ -66,7 +67,9 @@ func New() *Bundle {
 func (o *Bundle) Valid() []error {
 	errors := o.CommonObjectProperties.ValidSDO()
 	for _, obj := range o.Objects {
-		errors = append(errors, obj.Valid()...)
+		for _, e := range obj.Valid() {
+			errors = append(errors, fmt.Errorf("%s: %w", obj.GetCommonProperties().ID, e))
+		}
 	}
 	return errors
 }
