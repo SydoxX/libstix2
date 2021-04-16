@@ -11,7 +11,6 @@ import (
 
 	"github.com/avast/libstix2/objects/factory"
 
-	"github.com/avast/libstix2/defs"
 	"github.com/avast/libstix2/objects"
 
 	"github.com/avast/libstix2/objects/common"
@@ -60,12 +59,20 @@ func New() *Bundle {
 	var obj Bundle
 	obj.ObjectType = objects.TypeBundle
 	obj.SetNewSTIXID(objects.TypeBundle)
-	obj.SpecVersion = defs.STIX_VERSION
 	return &obj
 }
 
 func (o *Bundle) Valid() []error {
-	errors := o.CommonObjectProperties.ValidSDO()
+	var errors []error
+
+	if err := o.TypeProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	if err := o.IDProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
 	for _, obj := range o.Objects {
 		for _, e := range obj.Valid() {
 			errors = append(errors, fmt.Errorf("%s: %w", obj.GetCommonProperties().ID, e))

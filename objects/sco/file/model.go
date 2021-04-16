@@ -68,9 +68,17 @@ func New() *File {
 }
 
 func (o *File) Valid() []error {
-	errors := o.CommonObjectProperties.ValidSDO()
+	var errors []error
 
-	if o.Size <= 0 {
+	if err := o.TypeProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	if err := o.IDProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	if o.Size < 0 {
 		errors = append(errors, objects.PropertyInvalid("size", o.Size, "Must be >= 0"))
 	}
 

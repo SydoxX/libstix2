@@ -24,6 +24,13 @@ func TestDecode(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	if errors := bund.Valid(); len(errors) != 0 {
+		for _, e := range errors {
+			t.Error(e)
+		}
+		t.FailNow()
+	}
+
 	encoded, err := json.Marshal(&bund)
 	if err != nil {
 		t.Fatal(err)
@@ -60,7 +67,6 @@ func TestDecode(t *testing.T) {
 
 const testData = `{
     "type": "bundle",
-    "spec_version": "2.1",
     "id": "bundle--78cd02ff-61cf-4875-87c5-d93f836d4ddc",
     "objects": [
         {
@@ -112,14 +118,10 @@ const testData = `{
             "modified": "2021-04-14T09:18:00Z",
             "name": "Vulnerability Prevalence Extension",
             "description": "A vulnerability prevalence object defines how prevalent a vulnerability is occurring across both geographic and malware instances.",
-            "schema": "",
+            "schema": "TODO",
             "version": "1.0",
             "extension_types": [
                 "property-extension"
-            ],
-            "extension_properties": [
-                "x_avast_com_vulnerability_ref",
-                "x_avast_com_regional_prevalence_map"
             ]
         },
         {
