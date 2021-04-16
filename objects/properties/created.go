@@ -8,9 +8,8 @@ package properties
 import (
 	"fmt"
 
+	"github.com/avast/libstix2/datatypes/timestamp"
 	"github.com/avast/libstix2/objects"
-
-	timestamp2 "github.com/avast/libstix2/datatypes/timestamp"
 )
 
 // ----------------------------------------------------------------------
@@ -22,7 +21,7 @@ CreatedProperty - A property used by all STIX objects that captures the date
 and time that the object was created.
 */
 type CreatedProperty struct {
-	Created timestamp2.Timestamp `json:"created,omitempty"`
+	Created *timestamp.Timestamp `json:"created,omitempty"`
 }
 
 /*
@@ -32,7 +31,7 @@ number of problems found, and a slice of strings that contain the detailed
 results, whether good or bad.
 */
 func (o *CreatedProperty) VerifyExists() error {
-	if o.Created.IsZero() {
+	if o.Created == nil || o.Created.IsZero() {
 		return objects.PropertyMissing("created")
 	}
 	return nil
@@ -49,12 +48,12 @@ func (o *CreatedProperty) Compare(obj2 *CreatedProperty) (bool, int, []string) {
 	resultDetails := make([]string, 0)
 
 	// Check Created Value
-	if o.Created.Equal(obj2.Created.Time) {
+	if (o.Created != nil) != (obj2.Created != nil) || (o.Created != nil && obj2.Created != nil && !o.Created.Equal(obj2.Created.Time)) {
 		problemsFound++
-		str := fmt.Sprintf("-- The created dates do not match: %s | %s", o.Created, obj2.Created)
+		str := fmt.Sprintf("-- The created dates do not match: %v | %v", o.Created, obj2.Created)
 		resultDetails = append(resultDetails, str)
 	} else {
-		str := fmt.Sprintf("++ The created dates match: %s | %s", o.Created, obj2.Created)
+		str := fmt.Sprintf("++ The created dates match: %v | %v", o.Created, obj2.Created)
 		resultDetails = append(resultDetails, str)
 	}
 

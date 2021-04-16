@@ -8,9 +8,8 @@ package properties
 import (
 	"fmt"
 
+	"github.com/avast/libstix2/datatypes/timestamp"
 	"github.com/avast/libstix2/objects"
-
-	timestamp2 "github.com/avast/libstix2/datatypes/timestamp"
 )
 
 // ----------------------------------------------------------------------
@@ -23,11 +22,11 @@ and time that the object was modified or changed. This property effectively
 tracks the version of the object.
 */
 type ModifiedProperty struct {
-	Modified timestamp2.Timestamp `json:"modified,omitempty"`
+	Modified *timestamp.Timestamp `json:"modified,omitempty"`
 }
 
 func (o *ModifiedProperty) VerifyExists() error {
-	if o.Modified.IsZero() {
+	if o.Modified == nil || o.Modified.IsZero() {
 		return objects.PropertyMissing("modified")
 	}
 	return nil

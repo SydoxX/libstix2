@@ -36,7 +36,7 @@ type Indicator struct {
 	PatternType    vocabs.PatternType     `json:"pattern_type"`
 	PatternVersion string                 `json:"pattern_version,omitempty"`
 	ValidFrom      timestamp.Timestamp    `json:"valid_from"`
-	ValidUntil     timestamp.Timestamp    `json:"valid_until,omitempty"`
+	ValidUntil     *timestamp.Timestamp   `json:"valid_until,omitempty"`
 	properties.KillChainPhasesProperty
 }
 
@@ -75,7 +75,7 @@ func (o *Indicator) Valid() []error {
 		errors = append(errors, objects.PropertyMissing("valid_from"))
 	}
 
-	if err := timestamp.CheckRange(o.ValidFrom, o.ValidUntil, "valid_from", "valid_to"); err != nil {
+	if err := timestamp.CheckRange(&o.ValidFrom, o.ValidUntil, "valid_from", "valid_to"); err != nil {
 		errors = append(errors, err)
 	}
 

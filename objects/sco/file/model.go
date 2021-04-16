@@ -24,17 +24,17 @@ type File struct {
 	properties.ExtensionsProperty `idcontrib:"1"`
 	properties.NameProperty       `idcontrib:"1"`
 
-	Hashes             *FileHashes         `json:"hashes,omitempty" idcontrib:"1"`
-	Size               int64               `json:"size,omitempty"`
-	NameEnc            string              `json:"name_enc,omitempty"`
-	MagicNumberHex     hex.Hex             `json:"magic_number_hex,omitempty"`
-	MimeType           string              `json:"mime_type,omitempty"`
-	CTime              timestamp.Timestamp `json:"ctime,omitempty"`
-	MTime              timestamp.Timestamp `json:"mtime,omitempty"`
-	ATime              timestamp.Timestamp `json:"atime,omitempty"`
-	ParentDirectoryRef string              `json:"parent_directory_ref,omitempty"`
-	ContainsRef        []string            `json:"contains_ref,omitempty"`
-	ContentRef         string              `json:"content_ref,omitempty"`
+	Hashes             *FileHashes          `json:"hashes,omitempty" idcontrib:"1"`
+	Size               int64                `json:"size,omitempty"`
+	NameEnc            string               `json:"name_enc,omitempty"`
+	MagicNumberHex     hex.Hex              `json:"magic_number_hex,omitempty"`
+	MimeType           string               `json:"mime_type,omitempty"`
+	CTime              *timestamp.Timestamp `json:"ctime,omitempty"`
+	MTime              *timestamp.Timestamp `json:"mtime,omitempty"`
+	ATime              *timestamp.Timestamp `json:"atime,omitempty"`
+	ParentDirectoryRef string               `json:"parent_directory_ref,omitempty"`
+	ContainsRef        []string             `json:"contains_ref,omitempty"`
+	ContentRef         string               `json:"content_ref,omitempty"`
 }
 
 func init() {

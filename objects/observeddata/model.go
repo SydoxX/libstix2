@@ -67,7 +67,7 @@ func (o *ObservedData) Valid() []error {
 		errors = append(errors, objects.PropertyMissing("last_observed"))
 	}
 
-	if err := timestamp.CheckRange(o.FirstObserved, o.LastObserved, "first_observed", "last_observed"); err != nil {
+	if err := timestamp.CheckRange(&o.FirstObserved, &o.LastObserved, "first_observed", "last_observed"); err != nil {
 		errors = append(errors, err)
 	}
 

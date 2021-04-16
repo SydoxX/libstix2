@@ -29,7 +29,7 @@ type Report struct {
 	properties.NameProperty
 	properties.DescriptionProperty
 	ReportTypes []vocabs.ReportType `json:"report_types,omitempty"`
-	Published   timestamp.Timestamp `json:"published,omitempty"`
+	Published   timestamp.Timestamp `json:"published"`
 	properties.ObjectRefsProperty
 }
 

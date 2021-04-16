@@ -19,8 +19,8 @@ captures the time that this object was first and last seen in STIX timestamp
 format.
 */
 type SeenProperties struct {
-	FirstSeen timestamp.Timestamp `json:"first_seen,omitempty"`
-	LastSeen  timestamp.Timestamp `json:"last_seen,omitempty"`
+	FirstSeen *timestamp.Timestamp `json:"first_seen,omitempty"`
+	LastSeen  *timestamp.Timestamp `json:"last_seen,omitempty"`
 }
 
 func (o *SeenProperties) Valid() error {

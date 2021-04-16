@@ -27,10 +27,10 @@ type Relationship struct {
 	common.CommonObjectProperties
 	RelationshipType string `json:"relationship_type"`
 	properties.DescriptionProperty
-	SourceRef string              `json:"source_ref"`
-	TargetRef string              `json:"target_ref"`
-	StartTime timestamp.Timestamp `json:"start_time,omitempty"`
-	StopTime  timestamp.Timestamp `json:"stop_time,omitempty"`
+	SourceRef string               `json:"source_ref"`
+	TargetRef string               `json:"target_ref"`
+	StartTime *timestamp.Timestamp `json:"start_time,omitempty"`
+	StopTime  *timestamp.Timestamp `json:"stop_time,omitempty"`
 }
 
 func init() {

@@ -79,7 +79,7 @@ func (o *CommonObjectProperties) InitSDO(objectType objects.ObjectType) {
 	o.SpecVersion = defs.STIX_VERSION
 	o.ObjectType = objectType
 	o.SetNewSTIXID(objectType)
-	o.Created = timestamp.Now()
+	o.Created = timestamp.NowPtr()
 	o.Modified = o.Created
 }
 
@@ -98,7 +98,7 @@ func (o *CommonObjectProperties) InitSRO(objectType objects.ObjectType) {
 	o.SpecVersion = defs.STIX_VERSION
 	o.ObjectType = objectType
 	o.SetNewSTIXID(objectType)
-	o.Created = timestamp.Now()
+	o.Created = timestamp.NowPtr()
 	o.Modified = o.Created
 }
 

@@ -25,8 +25,8 @@ func Identity() *identity.Identity {
 	idt := identity.New()
 	idt.ID = (IdentityId)
 	idt.CreatedByRef = (IdentityId)
-	idt.Created = timestamp.New(IdentityCreated)
-	idt.Modified = timestamp.New(IdentityCreated)
+	idt.Created = timestamp.NewPtr(IdentityCreated)
+	idt.Modified = timestamp.NewPtr(IdentityCreated)
 	idt.Name = OrganizationNane
 	idt.IdentityClass = "organization"
 	return idt
