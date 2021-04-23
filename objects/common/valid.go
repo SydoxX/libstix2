@@ -5,6 +5,11 @@
 
 package common
 
+import (
+	"fmt"
+	"strings"
+)
+
 // ----------------------------------------------------------------------
 // Public Methods
 // ----------------------------------------------------------------------
@@ -29,6 +34,10 @@ func (o *CommonObjectProperties) ValidSDO() []error {
 
 	if err := o.IDProperty.VerifyExists(); err != nil {
 		errors = append(errors, err)
+	}
+
+	if typPrefix := string(o.ObjectType) + "--"; !strings.HasPrefix(o.ID, typPrefix) {
+		errors = append(errors, fmt.Errorf("object ID '%s' does not start with type prefix '%s'", o.ID, typPrefix))
 	}
 
 	if err := o.CreatedProperty.VerifyExists(); err != nil {
