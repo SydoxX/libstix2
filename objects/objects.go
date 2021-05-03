@@ -13,6 +13,7 @@ not.
 */
 
 type ObjectType string
+type ObjectTypeId uint16
 
 const (
 	TypeAttackPattern     = "attack-pattern"
@@ -61,51 +62,88 @@ const (
 	TypeExtensionDefinition = "extension-definition"
 )
 
-var ObjectTypes = map[ObjectType]bool{
-	TypeAttackPattern:       true,
-	TypeBundle:              true,
-	TypeCampaign:            true,
-	TypeCourseOfAction:      true,
-	TypeGrouping:            true,
-	TypeIdentity:            true,
-	TypeIndicator:           true,
-	TypeInfrastructure:      true,
-	TypeIntrusionSet:        true,
-	TypeLanguageContent:     true,
-	TypeLocation:            true,
-	TypeMalware:             true,
-	TypeMalwareAnalysis:     true,
-	TypeNote:                true,
-	TypeMarkingDefinition:   true,
-	TypeObservedData:        true,
-	TypeOpinion:             true,
-	TypeReport:              true,
-	TypeRelationship:        true,
-	TypeThreatActor:         true,
-	TypeTool:                true,
-	TypeSighting:            true,
-	TypeVulnerability:       true,
-	TypeArtifact:            true,
-	TypeAutonomousSystem:    true,
-	TypeDirectory:           true,
-	TypeDomainName:          true,
-	TypeEmailAddress:        true,
-	TypeEmailMessage:        true,
-	TypeFile:                true,
-	TypeIPv4Address:         true,
-	TypeIPv6Address:         true,
-	TypeMACAddress:          true,
-	TypeMutex:               true,
-	TypeNetworkTraffic:      true,
-	TypeProcess:             true,
-	TypeSoftware:            true,
-	TypeURL:                 true,
-	TypeUserAccount:         true,
-	TypeWindowsRegistryKey:  true,
-	TypeX509Certificate:     true,
-	TypeExtensionDefinition: true,
+// Do NOT change order of these, they create the ObjectTypeId value
+var objectTypeArray = [...]ObjectType{
+	TypeAttackPattern,
+	TypeBundle,
+	TypeCampaign,
+	TypeCourseOfAction,
+	TypeGrouping,
+	TypeIdentity,
+	TypeIndicator,
+	TypeInfrastructure,
+	TypeIntrusionSet,
+	TypeLanguageContent,
+	TypeLocation,
+	TypeMalware,
+	TypeMalwareAnalysis,
+	TypeNote,
+	TypeMarkingDefinition,
+	TypeObservedData,
+	TypeOpinion,
+	TypeReport,
+	TypeRelationship,
+	TypeThreatActor,
+	TypeTool,
+	TypeSighting,
+	TypeVulnerability,
+	TypeArtifact,
+	TypeAutonomousSystem,
+	TypeDirectory,
+	TypeDomainName,
+	TypeEmailAddress,
+	TypeEmailMessage,
+	TypeFile,
+	TypeIPv4Address,
+	TypeIPv6Address,
+	TypeMACAddress,
+	TypeMutex,
+	TypeNetworkTraffic,
+	TypeProcess,
+	TypeSoftware,
+	TypeURL,
+	TypeUserAccount,
+	TypeWindowsRegistryKey,
+	TypeX509Certificate,
+	TypeExtensionDefinition,
+}
+
+const ObjectTypeIdInvalid ObjectTypeId = 0
+
+var ObjectTypes map[ObjectType]ObjectTypeId
+
+func init() {
+	ObjectTypes = make(map[ObjectType]ObjectTypeId, len(objectTypeArray))
+	for i, typ := range objectTypeArray {
+		ObjectTypes[typ] = ObjectTypeId(i + 1)
+	}
 }
 
 func IsValidObjectType(t string) bool {
-	return ObjectTypes[ObjectType(t)]
+	return ObjectTypes[ObjectType(t)] != 0
+}
+
+func ObjectTypeToId(typ ObjectType) (id ObjectTypeId, ok bool) {
+	id, ok = ObjectTypes[typ]
+	return
+}
+
+func ObjectTypeIdToType(id ObjectTypeId) (typ ObjectType, ok bool) {
+	idx := int(id) - 1
+	if idx < 0 || idx >= len(objectTypeArray) {
+		return
+	}
+	ok = true
+	typ = objectTypeArray[idx]
+	return
+}
+
+func (id ObjectTypeId) Type() ObjectType {
+	typ, _ := ObjectTypeIdToType(id)
+	return typ
+}
+
+func (typ ObjectType) TypeId() ObjectTypeId {
+	id, _ := ObjectTypeToId(typ)
+	return id
 }
