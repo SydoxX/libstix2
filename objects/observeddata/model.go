@@ -56,6 +56,8 @@ func (o *ObservedData) Valid() []error {
 
 	if len(o.ObjectRefs) != 0 && len(o.Objects) != 0 {
 		errors = append(errors, objects.PropertyInvalid("object", o, "only one of 'objects' and 'object_refs' can be present"))
+	} else if len(o.ObjectRefs) == 0 && len(o.Objects) == 0 {
+		errors = append(errors, objects.PropertyInvalid("object_refs", o, "one of 'objects' and 'object_refs' must be present"))
 	}
 
 	if o.FirstObserved.IsZero() {
