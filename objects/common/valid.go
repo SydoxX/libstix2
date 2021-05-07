@@ -48,5 +48,9 @@ func (o *CommonObjectProperties) ValidSDO() []error {
 		errors = append(errors, err)
 	}
 
+	if err := o.ExtensionsProperty.Valid(); err != nil {
+		errors = append(errors, err)
+	}
+
 	return errors
 }

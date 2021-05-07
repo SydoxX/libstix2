@@ -30,7 +30,6 @@ type ObservedData struct {
 	LastObserved   timestamp.Timestamp `json:"last_observed"`
 	NumberObserved int                 `json:"number_observed"`
 	properties.ObjectRefsProperty
-	properties.ExtensionsProperty
 
 	// Deprecated: Objects is deprecated in Stix2.1
 	Objects map[string]interface{} `json:"objects,omitempty"`

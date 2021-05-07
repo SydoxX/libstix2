@@ -25,7 +25,6 @@ properties.
 type URLObject struct {
 	common.CommonObjectProperties
 	properties.ValueProperty `idcontrib:"1"`
-	properties.ExtensionsProperty
 }
 
 func init() {

@@ -32,6 +32,7 @@ func TestGetJsonPropertyNames(t *testing.T) {
 			{Name: "description"},
 			{Name: "aliases"},
 			{Name: "kill_chain_phases"},
+			{Name: "extensions", IsIdContributing: true},
 		},
 		objects.TypeCampaign: {
 			{Name: "type"},
@@ -54,6 +55,7 @@ func TestGetJsonPropertyNames(t *testing.T) {
 			{Name: "first_seen"},
 			{Name: "last_seen"},
 			{Name: "objective"},
+			{Name: "extensions", IsIdContributing: true},
 		},
 		objects.TypeDomainName: {
 			{Name: "type"},
@@ -72,7 +74,7 @@ func TestGetJsonPropertyNames(t *testing.T) {
 			{Name: "custom"},
 			{Name: "value", IsIdContributing: true},
 			{Name: "resolves_to_refs"},
-			{Name: "extensions"},
+			{Name: "extensions", IsIdContributing: true},
 		},
 	}
 

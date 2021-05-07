@@ -57,6 +57,7 @@ type CommonObjectProperties struct {
 	properties.LangProperty
 	properties.ExternalReferencesProperty
 	properties.MarkingProperties
+	properties.ExtensionsProperty
 	properties.CustomProperties
 	properties.RawProperty
 }

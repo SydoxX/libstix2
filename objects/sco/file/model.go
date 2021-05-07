@@ -21,8 +21,7 @@ type FileHashes struct {
 type File struct {
 	common.CommonObjectProperties
 	properties.GranularMarking
-	properties.ExtensionsProperty `idcontrib:"1"`
-	properties.NameProperty       `idcontrib:"1"`
+	properties.NameProperty `idcontrib:"1"`
 
 	Hashes             *FileHashes          `json:"hashes,omitempty" idcontrib:"1"`
 	Size               int64                `json:"size,omitempty"`

@@ -18,25 +18,30 @@ ValidSTIXID - This function will take in a STIX ID and return true if the
 string represents an actual STIX ID in the correct format.
 */
 func ValidSTIXID(id string) bool {
-	idparts := strings.Split(id, "--")
+	_, _, ok := SplitStixId(id)
+	return ok
+}
 
+func SplitStixId(id string) (typ objects.ObjectType, objUuid uuid.UUID, ok bool) {
+	idparts := strings.Split(id, "--")
 	if len(idparts) != 2 {
-		return false
+		return
 	}
 
 	// First check to see if the object type is valid, if not return false.
 	if valid := objects.IsValidObjectType(idparts[0]); valid == false {
 		// Short circuit if the STIX type part is wrong
-		return false
+		return
 	}
 
 	// If the type is valid, then check to see if the ID is a UUID, if not return
 	// false.
-	if _, err := uuid.Parse(idparts[1]); err != nil {
-		return false
+	var err error
+	if objUuid, err = uuid.Parse(idparts[1]); err != nil {
+		return
 	}
 
-	return true
+	return objects.ObjectType(idparts[0]), objUuid, true
 }
 
 func BuildId(objectType string, uuid uuid.UUID) string {

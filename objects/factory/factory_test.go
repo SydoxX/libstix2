@@ -139,6 +139,7 @@ const testData = `{
             ],
             "extensions": {
                 "extension-definition--645a395b-7349-5196-ad75-2f634c63f80e": {
+                    "extension_type": "property-extension",
                     "x_avast_com_vulnerability_ref": "vulnerability--e424600d-ffff-ffff-ffff-25ec58547683",
                     "x_avast_com_regional_prevalence_map": {
                         "AA": 2,

@@ -25,7 +25,6 @@ individual properties.
 type IPv4Addr struct {
 	common.CommonObjectProperties
 	properties.ValueProperty `idcontrib:"1"`
-	properties.ExtensionsProperty
 
 	// Deprecated
 	properties.ResolvesToRefsProperty

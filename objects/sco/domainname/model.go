@@ -24,8 +24,6 @@ individual properties.
 */
 type DomainName struct {
 	common.CommonObjectProperties
-	properties.ExtensionsProperty
-
 	properties.ValueProperty `idcontrib:"1"`
 
 	// Deprecated
