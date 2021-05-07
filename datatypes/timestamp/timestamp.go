@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-const Format = "2006-01-02T15:04:05.000Z07:00"
+const Format = "2006-01-02T15:04:05.000000Z07:00"
 
 type Timestamp struct {
 	time.Time
