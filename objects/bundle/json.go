@@ -21,6 +21,7 @@ import (
 	"github.com/freetaxii/libstix2/objects/sco/process"
 	"github.com/freetaxii/libstix2/objects/sco/software"
 	"github.com/freetaxii/libstix2/objects/sco/urlobject"
+	"github.com/freetaxii/libstix2/objects/sco/useraccount"
 	"github.com/freetaxii/libstix2/objects/sco/x509certificate"
 	"io"
 
@@ -148,6 +149,9 @@ func DecodeWithCustomObjects(r io.Reader, customDecoders map[string]DecodeFunc) 
 		},
 		"artifact": func(bytes []byte) (objects.STIXObject, error) {
 			return artifact.Decode(bytes)
+		},
+		"user-account": func(bytes []byte) (objects.STIXObject, error) {
+			return useraccount.Decode(bytes)
 		},
 	}
 	for k, v := range customDecoders {
