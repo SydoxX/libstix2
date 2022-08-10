@@ -571,3 +571,18 @@ func (o *DisplayNameProperty) SetDisplayName(val string) error {
 	o.DisplayName = val
 	return nil
 }
+
+// ----------------------------------------------------------------------
+// Hashes Property
+// ----------------------------------------------------------------------
+
+// HashesProperty -
+type HashesProperty struct {
+	Hashes map[string]string `json:"hashes,omitempty" bson:"hashes,omitempty"`
+}
+
+// SetHashes -
+func (o *HashesProperty) SetHashes(val map[string]string) error {
+	o.Hashes = val
+	return nil
+}

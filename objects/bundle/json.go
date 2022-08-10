@@ -8,6 +8,7 @@ package bundle
 import (
 	"encoding/json"
 	"github.com/freetaxii/libstix2/objects/malwareanalysis"
+	"github.com/freetaxii/libstix2/objects/sco/artifact"
 	"github.com/freetaxii/libstix2/objects/sco/autonomoussystem"
 	"github.com/freetaxii/libstix2/objects/sco/directory"
 	"github.com/freetaxii/libstix2/objects/sco/domainname"
@@ -144,6 +145,9 @@ func DecodeWithCustomObjects(r io.Reader, customDecoders map[string]DecodeFunc) 
 		},
 		"process": func(bytes []byte) (objects.STIXObject, error) {
 			return process.Decode(bytes)
+		},
+		"artifact": func(bytes []byte) (objects.STIXObject, error) {
+			return artifact.Decode(bytes)
 		},
 	}
 	for k, v := range customDecoders {
