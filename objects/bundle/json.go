@@ -17,6 +17,7 @@ import (
 	"github.com/freetaxii/libstix2/objects/sco/ipv4addr"
 	"github.com/freetaxii/libstix2/objects/sco/ipv6addr"
 	"github.com/freetaxii/libstix2/objects/sco/networktraffic"
+	"github.com/freetaxii/libstix2/objects/sco/process"
 	"github.com/freetaxii/libstix2/objects/sco/software"
 	"github.com/freetaxii/libstix2/objects/sco/urlobject"
 	"github.com/freetaxii/libstix2/objects/sco/x509certificate"
@@ -140,6 +141,9 @@ func DecodeWithCustomObjects(r io.Reader, customDecoders map[string]DecodeFunc) 
 		},
 		"directory": func(bytes []byte) (objects.STIXObject, error) {
 			return directory.Decode(bytes)
+		},
+		"process": func(bytes []byte) (objects.STIXObject, error) {
+			return process.Decode(bytes)
 		},
 	}
 	for k, v := range customDecoders {

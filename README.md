@@ -86,7 +86,7 @@ STIX Cyber-observable Objects
 - [ ] MAC Address
 - [ ] Mutex
 - [X] Network Traffic
-- [ ] Process
+- [X] Process
 - [X] Software
 - [X] URL
 - [ ] User Account
