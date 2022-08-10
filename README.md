@@ -76,7 +76,7 @@ STIX Relationship Objects
 STIX Cyber-observable Objects
 - [ ] Artifact
 - [X] Autonomous System
-- [ ] Directory
+- [X] Directory
 - [X] Domain Name
 - [X] Email Address
 - [X] Email Message

@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"github.com/freetaxii/libstix2/objects/malwareanalysis"
 	"github.com/freetaxii/libstix2/objects/sco/autonomoussystem"
+	"github.com/freetaxii/libstix2/objects/sco/directory"
 	"github.com/freetaxii/libstix2/objects/sco/domainname"
 	"github.com/freetaxii/libstix2/objects/sco/emailaddr"
 	"github.com/freetaxii/libstix2/objects/sco/emailmessage"
@@ -136,6 +137,9 @@ func DecodeWithCustomObjects(r io.Reader, customDecoders map[string]DecodeFunc) 
 		},
 		"file": func(bytes []byte) (objects.STIXObject, error) {
 			return file.Decode(bytes)
+		},
+		"directory": func(bytes []byte) (objects.STIXObject, error) {
+			return directory.Decode(bytes)
 		},
 	}
 	for k, v := range customDecoders {
