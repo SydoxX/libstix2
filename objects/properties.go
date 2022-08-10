@@ -586,3 +586,18 @@ func (o *HashesProperty) SetHashes(val map[string]string) error {
 	o.Hashes = val
 	return nil
 }
+
+// ----------------------------------------------------------------------
+// Extensions Property
+// ----------------------------------------------------------------------
+
+// ExtensionsProperty -
+type ExtensionsProperty struct {
+	Extensions map[string]any `json:"extensions,omitempty" bson:"extensions,omitempty"`
+}
+
+// SetExtensions -
+func (o *ExtensionsProperty) SetExtensions(val map[string]any) error {
+	o.Extensions = val
+	return nil
+}

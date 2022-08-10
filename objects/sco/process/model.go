@@ -21,7 +21,7 @@ individual properties.
 */
 type Process struct {
 	objects.CommonObjectProperties
-	Extensions           map[string]any    `json:"extensions,omitempty" bson:"extensions,omitempty"`
+	objects.ExtensionsProperty
 	IsHidden             bool              `json:"is_hidden,omitempty" bson:"is_hidden,omitempty"`
 	Pid                  int               `json:"pid,omitempty" bson:"pid,omitempty"`
 	CreatedTime          string            `json:"created_time,omitempty" bson:"created_time,omitempty"`
