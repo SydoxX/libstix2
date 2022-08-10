@@ -21,7 +21,7 @@ individual properties.
 */
 type File struct {
 	objects.CommonObjectProperties
-	Extensions map[string]string `json:"extensions,omitempty" bson:"extensions,omitempty"`
+	Extensions map[string]any    `json:"extensions,omitempty" bson:"extensions,omitempty"`
 	Hashes     map[string]string `json:"hashes,omitempty" bson:"hashes,omitempty"`
 	Size       int               `json:"size,omitempty" bson:"size,omitempty"`
 	objects.NameProperty

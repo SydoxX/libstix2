@@ -21,7 +21,7 @@ individual properties.
 */
 type NetworkTraffic struct {
 	objects.CommonObjectProperties
-	Extensions        map[string]string `json:"extensions,omitempty" bson:"extensions,omitempty"`
+	Extensions        map[string]any    `json:"extensions,omitempty" bson:"extensions,omitempty"`
 	Start             string            `json:"start,omitempty" bson:"start,omitempty"`
 	End               string            `json:"end,omitempty" bson:"end,omitempty"`
 	IsActive          bool              `json:"is_active,omitempty" bson:"is_active,omitempty"`
