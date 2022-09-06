@@ -1,4 +1,4 @@
-// Copyright 2015-2022 Bret Jordan, All rights reserved.
+// Copyright 2015-2020 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
@@ -6,7 +6,11 @@
 package sighting
 
 import (
-	"github.com/freetaxii/libstix2/objects"
+	"github.com/avast/libstix2/datatypes/timestamp"
+	"github.com/avast/libstix2/objects"
+	"github.com/avast/libstix2/objects/common"
+	"github.com/avast/libstix2/objects/factory"
+	"github.com/avast/libstix2/objects/properties"
 )
 
 // ----------------------------------------------------------------------
@@ -20,36 +24,42 @@ the methods not defined local to this type are inherited from the individual
 properties.
 */
 type Sighting struct {
-	objects.CommonObjectProperties
-	objects.DescriptionProperty
-	objects.SeenProperties
-	Count            int      `json:"count,omitempty" bson:"count,omitempty"`
-	SightingOfRef    string   `json:"sighting_of_ref,omitempty" bson:"sighting_of_ref,omitempty"`
-	ObservedDataRefs []string `json:"observed_data_refs,omitempty" bson:"observed_data_refs,omitempty"`
-	WhereSightedRefs []string `json:"where_sighted_refs,omitempty" bson:"where_sighted_refs,omitempty"`
-	Summary          bool     `json:"summary,omitempty" bson:"summary,omitempty"`
+	common.CommonObjectProperties
+	properties.DescriptionProperty
+	properties.SeenProperties
+	Count            int      `json:"count,omitempty"`
+	SightingOfRef    string   `json:"sighting_of_ref"`
+	ObservedDataRefs []string `json:"observed_data_refs,omitempty"`
+	WhereSightedRefs []string `json:"where_sighted_refs,omitempty"`
+	Summary          bool     `json:"summary,omitempty"`
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *Sighting) GetPropertyList() []string {
-	return []string{"description", "first_seen", "last_seen", "count", "sighting_of_ref", "observed_data_refs", "where_sighted_refs", "summary"}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeSighting, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX Sighting object and return
-it as a pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *Sighting {
 	var obj Sighting
-	obj.InitSRO("sighting")
+	obj.InitSRO(objects.TypeSighting)
 	return &obj
+}
+
+func (o *Sighting) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	if len(o.SightingOfRef) == 0 {
+		errors = append(errors, objects.PropertyMissing("sighting_of_ref"))
+	}
+
+	if o.Count <= 0 {
+		errors = append(errors, objects.PropertyInvalid("count", o.Count, "Must be >= 0"))
+	}
+
+	if err := timestamp.CheckRange(o.FirstSeen, o.LastSeen, "fist_seen", "last_seen"); err != nil {
+		errors = append(errors, err)
+	}
+
+	return errors
 }

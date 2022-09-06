@@ -1,4 +1,4 @@
-// Copyright 2015-2022 Bret Jordan, All rights reserved.
+// Copyright 2015-2020 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
@@ -6,7 +6,12 @@
 package report
 
 import (
-	"github.com/freetaxii/libstix2/objects"
+	"github.com/avast/libstix2/datatypes/timestamp"
+	"github.com/avast/libstix2/objects"
+	"github.com/avast/libstix2/objects/common"
+	"github.com/avast/libstix2/objects/factory"
+	"github.com/avast/libstix2/objects/properties"
+	"github.com/avast/libstix2/vocabs"
 )
 
 // ----------------------------------------------------------------------
@@ -20,34 +25,44 @@ methods not defined local to this type are inherited from the individual
 properties.
 */
 type Report struct {
-	objects.CommonObjectProperties
-	objects.NameProperty
-	objects.DescriptionProperty
-	ReportTypes []string `json:"report_types,omitempty" bson:"report_types,omitempty"`
-	Published   string   `json:"published,omitempty" bson:"published,omitempty"`
-	objects.ObjectRefsProperty
+	common.CommonObjectProperties
+	properties.NameProperty
+	properties.DescriptionProperty
+	ReportTypes []vocabs.ReportType `json:"report_types,omitempty"`
+	Published   timestamp.Timestamp `json:"published"`
+	properties.ObjectRefsProperty
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *Report) GetPropertyList() []string {
-	return []string{"name", "description", "report_types", "published", "object_refs"}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeReport, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX Report object and return
-it as a pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *Report {
 	var obj Report
-	obj.InitSDO("report")
+	obj.InitSDO(objects.TypeReport)
 	return &obj
+}
+
+func (o *Report) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	if err := o.NameProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	if len(o.ReportTypes) == 0 {
+		errors = append(errors, objects.PropertyMissing("report_types"))
+	}
+
+	if o.Published.IsZero() {
+		errors = append(errors, objects.PropertyMissing("published"))
+	}
+
+	if err := o.ObjectRefsProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	return errors
 }

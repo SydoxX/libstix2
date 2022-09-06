@@ -11,4 +11,6 @@ built to support STIX 2.x.
 */
 package libstix2
 
-// Version = "0.6.1"
+import (
+	_ "github.com/avast/libstix2/objects/factory/importall"
+)

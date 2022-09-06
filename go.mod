@@ -1,10 +1,16 @@
-module github.com/freetaxii/libstix2
+module github.com/avast/libstix2
 
 go 1.18
 
 require (
-	github.com/gologme/log v1.2.0
-	github.com/mattn/go-sqlite3 v1.13.0
-	github.com/pborman/getopt v0.0.0-20190409184431-ee0cd42419d3 // indirect
-	github.com/pborman/uuid v1.2.0
+	github.com/google/uuid v1.2.0
+	github.com/gowebpki/jcs v0.0.0-20210215032300-680d9436c864
+	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
+	github.com/mattn/go-colorable v0.1.8 // indirect
+	github.com/onsi/ginkgo v1.16.1 // indirect
+	github.com/onsi/gomega v1.11.0 // indirect
+	github.com/sergi/go-diff v1.2.0 // indirect
+	github.com/yudai/gojsondiff v1.0.0
+	github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82 // indirect
+	github.com/yudai/pp v2.0.1+incompatible // indirect
 )
