@@ -1,4 +1,4 @@
-// Copyright 2015-2022 Bret Jordan, All rights reserved.
+// Copyright 2015-2020 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
@@ -6,7 +6,10 @@
 package intrusionset
 
 import (
-	"github.com/freetaxii/libstix2/objects"
+	"github.com/avast/libstix2/objects"
+	"github.com/avast/libstix2/objects/common"
+	"github.com/avast/libstix2/objects/factory"
+	"github.com/avast/libstix2/objects/properties"
 )
 
 // ----------------------------------------------------------------------
@@ -20,23 +23,20 @@ All of the methods not defined local to this type are inherited from the
 individual properties.
 */
 type IntrusionSet struct {
-	objects.CommonObjectProperties
-	objects.NameProperty
-	objects.DescriptionProperty
-	objects.AliasesProperty
-	objects.SeenProperties
-	objects.GoalsProperty
-	objects.ResourceLevelProperty
-	objects.MotivationProperties
+	common.CommonObjectProperties
+	properties.NameProperty
+	properties.DescriptionProperty
+	properties.AliasesProperty
+	properties.SeenProperties
+	properties.GoalsProperty
+	properties.ResourceLevelProperty
+	properties.MotivationProperties
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *IntrusionSet) GetPropertyList() []string {
-	return []string{"name", "description", "aliases", "first_seen", "last_seen", "goals", "resource_level", "primary_motivation", "secondary_motivations"}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeIntrusionSet, func() common.STIXObject {
+		return New()
+	})
 }
 
 // ----------------------------------------------------------------------
@@ -50,6 +50,15 @@ properties.
 */
 func New() *IntrusionSet {
 	var obj IntrusionSet
-	obj.InitSDO("intrusion-set")
+	obj.InitSDO(objects.TypeIntrusionSet)
 	return &obj
+}
+
+func (o *IntrusionSet) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	if err := o.NameProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+	return errors
 }

@@ -1,75 +1,93 @@
-// Copyright 2015-2022 Bret Jordan, All rights reserved.
-//
-// Use of this source code is governed by an Apache 2.0 license that can be
-// found in the LICENSE file in the root of the source tree.
-
 package file
 
 import (
-	"github.com/freetaxii/libstix2/objects"
+	"strings"
+
+	"github.com/avast/libstix2/datatypes/hex"
+	"github.com/avast/libstix2/datatypes/timestamp"
+	"github.com/avast/libstix2/objects"
+	"github.com/avast/libstix2/objects/common"
+	"github.com/avast/libstix2/objects/factory"
+	"github.com/avast/libstix2/objects/properties"
 )
 
-// ----------------------------------------------------------------------
-// Define Object Model
-// ----------------------------------------------------------------------
+type FileHashes struct {
+	Sha512 string `json:"SHA-512,omitempty"`
+	Sha256 string `json:"SHA-256,omitempty"`
+	Sha1   string `json:"SHA-1,omitempty"`
+	MD5    string `json:"MD5,omitempty"`
+}
 
-/*
-File - This type implements the STIX 2 File SCO and defines
-all of the properties and methods needed to create and work with this object.
-All of the methods not defined local to this type are inherited from the
-individual properties.
-*/
 type File struct {
-	objects.CommonObjectProperties
-	objects.ExtensionsProperty
-	objects.HashesProperty
-	Size int `json:"size,omitempty" bson:"size,omitempty"`
-	objects.NameProperty
-	NameEnc            string   `json:"name_enc,omitempty" bson:"name_enc,omitempty"`
-	MagicNumberHex     string   `json:"magic_number_hex,omitempty" bson:"magic_number_hex,omitempty"`
-	MimeType           string   `json:"mime_type,omitempty" bson:"mime_type,omitempty"`
-	Ctime              string   `json:"ctime,omitempty" bson:"ctime,omitempty"`
-	Mtime              string   `json:"mtime,omitempty" bson:"mtime,omitempty"`
-	Atime              string   `json:"atime,omitempty" bson:"atime,omitempty"`
-	ParentDirectoryRef string   `json:"parent_directory_ref,omitempty" bson:"parent_directory_ref,omitempty"`
-	ContainsRef        []string `json:"contains_ref,omitempty" bson:"contains_ref,omitempty"`
-	ContentRef         string   `json:"content_ref,omitempty" bson:"content_ref,omitempty"`
+	common.CommonObjectProperties
+	properties.GranularMarking
+	properties.NameProperty `idcontrib:"1"`
+
+	Hashes             *FileHashes          `json:"hashes,omitempty" idcontrib:"1"`
+	Size               int64                `json:"size,omitempty"`
+	NameEnc            string               `json:"name_enc,omitempty"`
+	MagicNumberHex     hex.Hex              `json:"magic_number_hex,omitempty"`
+	MimeType           string               `json:"mime_type,omitempty"`
+	CTime              *timestamp.Timestamp `json:"ctime,omitempty"`
+	MTime              *timestamp.Timestamp `json:"mtime,omitempty"`
+	ATime              *timestamp.Timestamp `json:"atime,omitempty"`
+	ParentDirectoryRef string               `json:"parent_directory_ref,omitempty"`
+	ContainsRef        []string             `json:"contains_ref,omitempty"`
+	ContentRef         string               `json:"content_ref,omitempty"`
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *File) GetPropertyList() []string {
-	return []string{
-		"extensions",
-		"hashes",
-		"size",
-		"name",
-		"name_enc",
-		"magic_number_hex",
-		"mime_type",
-		"ctime",
-		"mtime",
-		"atime",
-		"parent_directory_ref",
-		"contains_ref",
-		"content_ref",
+func init() {
+	factory.RegisterObjectCreator(objects.TypeFile, func() common.STIXObject {
+		return New()
+	})
+}
+
+func (o *File) FixupIdContributingProperties(properties map[string]interface{}) {
+	hashes, ok := properties["hashes"].(map[string]interface{})
+	if !ok {
+		return
 	}
+
+	for _, algo := range [...]string{"MD5", "SHA-1", "SHA-256", "SHA-512"} {
+		if val, prs := hashes[algo]; prs {
+			properties["hashes"] = map[string]interface{}{
+				algo: val,
+			}
+			return
+		}
+	}
+
+	delete(properties, "hashes")
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX File SCO and return it as a
-pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *File {
 	var obj File
-	obj.InitSCO("file")
+	obj.InitSCO(objects.TypeFile)
 	return &obj
+}
+
+func (o *File) Valid() []error {
+	var errors []error
+
+	if err := o.TypeProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	if err := o.IDProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	if o.Size < 0 {
+		errors = append(errors, objects.PropertyInvalid("size", o.Size, "Must be >= 0"))
+	}
+
+	if o.ParentDirectoryRef != "" && !strings.HasPrefix(o.ParentDirectoryRef, objects.TypeDirectory) {
+		errors = append(errors, objects.PropertyInvalid("parent_directory_ref", o.ParentDirectoryRef, "must be reference to a directory object."))
+	}
+
+	if o.ContentRef != "" && !strings.HasPrefix(o.ContentRef, objects.TypeArtifact) {
+		errors = append(errors, objects.PropertyInvalid("content_ref", o.ContentRef, "must be reference to an artifact object."))
+	}
+
+	return errors
 }
