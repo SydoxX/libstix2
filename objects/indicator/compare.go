@@ -1,4 +1,4 @@
-// Copyright 2015-2022 Bret Jordan, All rights reserved.
+// Copyright 2015-2020 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
@@ -24,16 +24,16 @@ func (o *Indicator) Compare(obj2 *Indicator) (bool, int, []string) {
 	resultDetails := make([]string, 0)
 
 	// Check common properties
-	_, pBase, dBase := o.CommonObjectProperties.Compare(&obj2.CommonObjectProperties, false)
+	_, pBase, dBase := o.CommonObjectProperties.Compare(&obj2.CommonObjectProperties)
 	problemsFound += pBase
 	resultDetails = append(resultDetails, dBase...)
 
 	// Check Name Values
-	_, pNames, dNames := o.NameProperty.Compare(&obj2.NameProperty, false)
+	_, pNames, dNames := o.NameProperty.Compare(&obj2.NameProperty)
 	problemsFound += pNames
 	resultDetails = append(resultDetails, dNames...)
 
-	_, pDescriptions, dDescriptions := o.DescriptionProperty.Compare(&obj2.DescriptionProperty, false)
+	_, pDescriptions, dDescriptions := o.DescriptionProperty.Compare(&obj2.DescriptionProperty)
 	problemsFound += pDescriptions
 	resultDetails = append(resultDetails, dDescriptions...)
 
@@ -110,7 +110,7 @@ func (o *Indicator) Compare(obj2 *Indicator) (bool, int, []string) {
 	}
 
 	// Check Kill Chain Phases
-	if valid, problems, details := o.KillChainPhasesProperty.Compare(&obj2.KillChainPhasesProperty, false); valid != true {
+	if valid, problems, details := o.KillChainPhasesProperty.Compare(&obj2.KillChainPhasesProperty); valid != true {
 		problemsFound += problems
 		for _, v := range details {
 			resultDetails = append(resultDetails, v)
