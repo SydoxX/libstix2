@@ -1,4 +1,4 @@
-// Copyright 2015-2022 Bret Jordan, All rights reserved.
+// Copyright 2015-2020 Bret Jordan, All rights reserved.
 //
 // Use of this source code is governed by an Apache 2.0 license that can be
 // found in the LICENSE file in the root of the source tree.
@@ -7,8 +7,13 @@ package bundle
 
 import (
 	"encoding/json"
+	"fmt"
 
-	"github.com/freetaxii/libstix2/objects"
+	"github.com/avast/libstix2/objects/factory"
+
+	"github.com/avast/libstix2/objects"
+
+	"github.com/avast/libstix2/objects/common"
 )
 
 // ----------------------------------------------------------------------
@@ -22,8 +27,14 @@ methods not defined local to this type are inherited from the individual
 properties.
 */
 type Bundle struct {
-	objects.CommonObjectProperties
-	Objects []objects.STIXObject `json:"objects,omitempty" bson:"objects,omitempty"`
+	common.CommonObjectProperties
+	Objects []common.STIXObject `json:"objects,omitempty"`
+}
+
+func init() {
+	factory.RegisterObjectCreator(objects.TypeBundle, func() common.STIXObject {
+		return New()
+	})
 }
 
 /*
@@ -31,8 +42,8 @@ bundleRawDecode - This type is used for decoding a STIX bundle since the
 Objects property needs special handling.
 */
 type bundleRawDecode struct {
-	objects.CommonObjectProperties
-	Objects []json.RawMessage `json:"objects,omitempty" bson:"objects,omitempty"`
+	common.CommonObjectProperties
+	Objects []json.RawMessage `json:"objects,omitempty"`
 }
 
 // ----------------------------------------------------------------------
@@ -46,6 +57,30 @@ not have all of the fields that are common to a standard object.
 */
 func New() *Bundle {
 	var obj Bundle
-	obj.InitBundle()
+	obj.ObjectType = objects.TypeBundle
+	obj.SetNewSTIXID(objects.TypeBundle)
 	return &obj
+}
+
+func (o *Bundle) Valid() []error {
+	var errors []error
+
+	if err := o.TypeProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	if err := o.IDProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	for _, obj := range o.Objects {
+		for _, e := range obj.Valid() {
+			errors = append(errors, fmt.Errorf("%s: %w", obj.GetCommonProperties().ID, e))
+		}
+	}
+	return errors
+}
+
+func (o *Bundle) AddObject(i common.STIXObject) {
+	o.Objects = append(o.Objects, i)
 }
