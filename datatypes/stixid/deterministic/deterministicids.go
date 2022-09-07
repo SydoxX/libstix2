@@ -18,7 +18,7 @@ import (
 var Stix21DeterminableNamespace = uuid.MustParse("00abedb4-aa42-466c-9c01-fed23315a9b7")
 
 type IdContributingPropertyFixups interface {
-	FixupIdContributingProperties(properties map[string]interface{})
+	FixupIdContributingProperties(properties map[string]any)
 }
 
 // https://github.com/oasis-open/cti-python-stix2/blob/2743b90fc0afe45193863d3f43f69b5f95cda6a3/stix2/base.py
@@ -29,12 +29,12 @@ func DetermineId(obj common.STIXObject) (string, error) {
 		return "", err
 	}
 
-	var generalized map[string]interface{}
+	var generalized map[string]any
 	if err := json.Unmarshal(encoded, &generalized); err != nil {
 		return "", err
 	}
 
-	idDeterminingObject := map[string]interface{}{}
+	idDeterminingObject := map[string]any{}
 	for _, n := range factory.GetJsonPropertyNames(obj.GetCommonProperties().ObjectType) {
 		if !n.IsIdContributing {
 			continue

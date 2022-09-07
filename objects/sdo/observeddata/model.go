@@ -32,7 +32,7 @@ type ObservedData struct {
 	properties.ObjectRefsProperty
 
 	// Deprecated: Objects is deprecated in Stix2.1
-	Objects map[string]interface{} `json:"objects,omitempty"`
+	Objects map[string]any `json:"objects,omitempty"`
 }
 
 func init() {

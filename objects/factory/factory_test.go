@@ -48,7 +48,7 @@ func TestDecode(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		var baseJson map[string]interface{}
+		var baseJson map[string]any
 		if err := json.Unmarshal(expectedNormalized, &baseJson); err != nil {
 			t.Fatal(err)
 		}

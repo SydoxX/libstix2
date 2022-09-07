@@ -42,15 +42,15 @@ func init() {
 	})
 }
 
-func (o *File) FixupIdContributingProperties(properties map[string]interface{}) {
-	hashes, ok := properties["hashes"].(map[string]interface{})
+func (o *File) FixupIdContributingProperties(properties map[string]any) {
+	hashes, ok := properties["hashes"].(map[string]any)
 	if !ok {
 		return
 	}
 
 	for _, algo := range [...]string{"MD5", "SHA-1", "SHA-256", "SHA-512"} {
 		if val, prs := hashes[algo]; prs {
-			properties["hashes"] = map[string]interface{}{
+			properties["hashes"] = map[string]any{
 				algo: val,
 			}
 			return
