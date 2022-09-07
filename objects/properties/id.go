@@ -8,10 +8,10 @@ package properties
 import (
 	"fmt"
 
-	"github.com/avast/libstix2/datatypes/stixid"
+	"github.com/nextpart/libstix2/datatypes/stixid"
 
-	"github.com/avast/libstix2/objects"
 	"github.com/google/uuid"
+	"github.com/nextpart/libstix2/objects"
 )
 
 // ----------------------------------------------------------------------

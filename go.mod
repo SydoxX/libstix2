@@ -1,4 +1,4 @@
-module github.com/avast/libstix2
+module github.com/nextpart/libstix2
 
 go 1.18
 

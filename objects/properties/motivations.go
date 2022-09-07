@@ -5,7 +5,7 @@
 
 package properties
 
-import "github.com/avast/libstix2/vocabs"
+import "github.com/nextpart/libstix2/vocabs"
 
 // ----------------------------------------------------------------------
 // Define Types

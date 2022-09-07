@@ -9,8 +9,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/avast/libstix2/objects"
 	"github.com/google/uuid"
+	"github.com/nextpart/libstix2/objects"
 )
 
 /*

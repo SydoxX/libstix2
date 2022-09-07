@@ -5,10 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/avast/libstix2/objects"
-	"github.com/avast/libstix2/objects/factory"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/objects/factory"
 
-	_ "github.com/avast/libstix2/objects/factory/importall"
+	_ "github.com/nextpart/libstix2/objects/factory/importall"
 )
 
 func TestGetJsonPropertyNames(t *testing.T) {

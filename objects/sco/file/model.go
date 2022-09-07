@@ -3,12 +3,12 @@ package file
 import (
 	"strings"
 
-	"github.com/avast/libstix2/datatypes/hex"
-	"github.com/avast/libstix2/datatypes/timestamp"
-	"github.com/avast/libstix2/objects"
-	"github.com/avast/libstix2/objects/common"
-	"github.com/avast/libstix2/objects/factory"
-	"github.com/avast/libstix2/objects/properties"
+	"github.com/nextpart/libstix2/datatypes/hex"
+	"github.com/nextpart/libstix2/datatypes/timestamp"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/objects/common"
+	"github.com/nextpart/libstix2/objects/factory"
+	"github.com/nextpart/libstix2/objects/properties"
 )
 
 type FileHashes struct {

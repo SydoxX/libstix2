@@ -8,8 +8,8 @@ package properties
 import (
 	"fmt"
 
-	"github.com/avast/libstix2/datatypes/timestamp"
-	"github.com/avast/libstix2/objects"
+	"github.com/nextpart/libstix2/datatypes/timestamp"
+	"github.com/nextpart/libstix2/objects"
 )
 
 // ----------------------------------------------------------------------

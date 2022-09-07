@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/avast/libstix2/datatypes/stixid"
-	"github.com/avast/libstix2/objects"
-	"github.com/avast/libstix2/vocabs"
+	"github.com/nextpart/libstix2/datatypes/stixid"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/vocabs"
 )
 
 type ExtensionsProperty struct {

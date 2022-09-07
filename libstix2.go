@@ -12,5 +12,5 @@ built to support STIX 2.x.
 package libstix2
 
 import (
-	_ "github.com/avast/libstix2/objects/factory/importall"
+	_ "github.com/nextpart/libstix2/objects/factory/importall"
 )

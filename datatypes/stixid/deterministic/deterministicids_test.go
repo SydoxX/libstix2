@@ -3,9 +3,9 @@ package deterministic_test
 import (
 	"testing"
 
-	"github.com/avast/libstix2/datatypes/stixid/deterministic"
+	"github.com/nextpart/libstix2/datatypes/stixid/deterministic"
 
-	"github.com/avast/libstix2/objects/sco/file"
+	"github.com/nextpart/libstix2/objects/sco/file"
 )
 
 func TestDetermineFileId(t *testing.T) {

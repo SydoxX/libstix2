@@ -6,9 +6,9 @@ import (
 	"os"
 	"reflect"
 
-	"github.com/avast/libstix2/objects/factory"
+	"github.com/nextpart/libstix2/objects/factory"
 
-	"github.com/avast/libstix2/objects/common"
+	"github.com/nextpart/libstix2/objects/common"
 
 	"github.com/google/uuid"
 	"github.com/gowebpki/jcs"

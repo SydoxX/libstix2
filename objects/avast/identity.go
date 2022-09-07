@@ -1,17 +1,17 @@
 package avast
 
 import (
+	"github.com/nextpart/libstix2/objects/sdo/identity"
 	"time"
 
-	"github.com/avast/libstix2/objects"
+	"github.com/nextpart/libstix2/objects"
 
-	"github.com/avast/libstix2/vocabs"
+	"github.com/nextpart/libstix2/vocabs"
 
-	"github.com/avast/libstix2/datatypes/timestamp"
+	"github.com/nextpart/libstix2/datatypes/timestamp"
 
-	"github.com/avast/libstix2/datatypes/stixid"
+	"github.com/nextpart/libstix2/datatypes/stixid"
 
-	"github.com/avast/libstix2/objects/identity"
 	"github.com/google/uuid"
 )
 

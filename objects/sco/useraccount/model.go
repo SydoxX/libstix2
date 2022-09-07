@@ -6,10 +6,10 @@
 package useraccount
 
 import (
-	"github.com/avast/libstix2/objects"
-	"github.com/avast/libstix2/objects/common"
-	"github.com/avast/libstix2/objects/factory"
-	"github.com/avast/libstix2/objects/properties"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/objects/common"
+	"github.com/nextpart/libstix2/objects/factory"
+	"github.com/nextpart/libstix2/objects/properties"
 )
 
 // ----------------------------------------------------------------------

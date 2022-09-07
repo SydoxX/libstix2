@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/avast/libstix2/datatypes/timestamp"
+	"github.com/nextpart/libstix2/datatypes/timestamp"
 )
 
 type timeStrDirect struct {
