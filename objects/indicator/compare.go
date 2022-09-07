@@ -24,7 +24,7 @@ func (o *Indicator) Compare(obj2 *Indicator) (bool, int, []string) {
 	resultDetails := make([]string, 0)
 
 	// Check common properties
-	_, pBase, dBase := o.CommonObjectProperties.Compare(&obj2.CommonObjectProperties, false)
+	_, pBase, dBase := o.CommonObjectProperties.Compare(&obj2.CommonObjectProperties)
 	problemsFound += pBase
 	resultDetails = append(resultDetails, dBase...)
 
