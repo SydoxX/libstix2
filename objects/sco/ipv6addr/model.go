@@ -6,7 +6,10 @@
 package ipv6addr
 
 import (
-	"github.com/freetaxii/libstix2/objects"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/objects/common"
+	"github.com/nextpart/libstix2/objects/factory"
+	"github.com/nextpart/libstix2/objects/properties"
 )
 
 // ----------------------------------------------------------------------
@@ -20,32 +23,30 @@ All of the methods not defined local to this type are inherited from the
 individual properties.
 */
 type IPv6Addr struct {
-	objects.CommonObjectProperties
-	objects.ValueProperty
-	objects.ResolvesToRefsProperty
-	objects.BelongsToRefsProperty
+	common.CommonObjectProperties
+	properties.ValueProperty
+	properties.ResolvesToRefsProperty
+	properties.BelongsToRefsProperty
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *IPv6Addr) GetPropertyList() []string {
-	return []string{"value", "resolves_to_refs", "belongs_to_refs"}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeIPv6Address, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX IPv4 Address SCO and return it as
-a pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *IPv6Addr {
 	var obj IPv6Addr
-	obj.InitSCO("ipv6-addr")
+	obj.InitSCO(objects.TypeIPv6Address)
 	return &obj
+}
+
+func (o *IPv6Addr) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	if err := o.ValueProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	return errors
 }

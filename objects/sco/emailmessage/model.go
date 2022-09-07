@@ -6,7 +6,9 @@
 package emailmessage
 
 import (
-	"github.com/freetaxii/libstix2/objects"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/objects/common"
+	"github.com/nextpart/libstix2/objects/factory"
 )
 
 // ----------------------------------------------------------------------
@@ -20,7 +22,7 @@ All of the methods not defined local to this type are inherited from the
 individual properties.
 */
 type EmailMessage struct {
-	objects.CommonObjectProperties
+	common.CommonObjectProperties
 	IsMultipart            bool           `json:"is_multipart,omitempty" bson:"is_multipart,omitempty"`
 	Date                   string         `json:"date,omitempty" bson:"date,omitempty"`
 	ContentType            string         `json:"content_type,omitempty" bson:"content_type,omitempty"`
@@ -45,42 +47,20 @@ type MimePartType struct {
 	ContentDisposition string `json:"content_disposition,omitempty" bson:"content_disposition,omitempty"`
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *EmailMessage) GetPropertyList() []string {
-	return []string{
-		"is_multipart",
-		"date",
-		"content_type",
-		"from_ref",
-		"sender_ref",
-		"to_refs",
-		"cc_refs",
-		"bcc_refs",
-		"message_id",
-		"subject",
-		"received_lines",
-		"additional_header_fields",
-		"body",
-		"body_multipart",
-		"raw_email_ref",
-	}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeEmailMessage, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX IPv4 Address SCO and return it as
-a pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *EmailMessage {
 	var obj EmailMessage
-	obj.InitSCO("email-message")
+	obj.InitSCO(objects.TypeEmailMessage)
 	return &obj
+}
+
+func (o *EmailMessage) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	return errors
 }

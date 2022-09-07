@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/avast/libstix2/datatypes/hex"
+	"github.com/nextpart/libstix2/datatypes/hex"
 )
 
 type hexStruct struct {

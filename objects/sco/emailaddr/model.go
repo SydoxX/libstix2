@@ -6,7 +6,10 @@
 package emailaddr
 
 import (
-	"github.com/freetaxii/libstix2/objects"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/objects/common"
+	"github.com/nextpart/libstix2/objects/factory"
+	"github.com/nextpart/libstix2/objects/properties"
 )
 
 // ----------------------------------------------------------------------
@@ -14,38 +17,36 @@ import (
 // ----------------------------------------------------------------------
 
 /*
-IPv4Addr - This type implements the STIX 2 IPv4 Address SCO and defines
+EmailAddr - This type implements the STIX 2 Email Address SCO and defines
 all of the properties and methods needed to create and work with this object.
 All of the methods not defined local to this type are inherited from the
 individual properties.
 */
 type EmailAddr struct {
-	objects.CommonObjectProperties
-	objects.ValueProperty
-	objects.DisplayNameProperty
-	objects.BelongsToRefsProperty
+	common.CommonObjectProperties
+	properties.ValueProperty
+	DisplayName string `json:"display_name,omitempty" bson:"display_name,omitempty"`
+	properties.BelongsToRefsProperty
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *EmailAddr) GetPropertyList() []string {
-	return []string{"value", "resolves_to_refs", "display_name", "belongs_to_refs"}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeEmailAddress, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX IPv4 Address SCO and return it as
-a pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *EmailAddr {
 	var obj EmailAddr
-	obj.InitSCO("email-addr")
+	obj.InitSCO(objects.TypeEmailAddress)
 	return &obj
+}
+
+func (o *EmailAddr) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	if err := o.ValueProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	return errors
 }

@@ -6,7 +6,9 @@
 package directory
 
 import (
-	"github.com/freetaxii/libstix2/objects"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/objects/common"
+	"github.com/nextpart/libstix2/objects/factory"
 )
 
 // ----------------------------------------------------------------------
@@ -20,7 +22,7 @@ All of the methods not defined local to this type are inherited from the
 individual properties.
 */
 type Directory struct {
-	objects.CommonObjectProperties
+	common.CommonObjectProperties
 	Path        string   `json:"path,omitempty" bson:"path,omitempty"`
 	PathEnc     string   `json:"path_enc,omitempty" bson:"path_enc,omitempty"`
 	Ctime       string   `json:"ctime,omitempty" bson:"ctime,omitempty"`
@@ -29,33 +31,20 @@ type Directory struct {
 	ContainsRef []string `json:"contains_ref,omitempty" bson:"contains_ref,omitempty"`
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *Directory) GetPropertyList() []string {
-	return []string{
-		"path",
-		"path_enc",
-		"ctime",
-		"mtime",
-		"atime",
-		"contains_ref",
-	}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeDirectory, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX Directory SCO and return it as a
-pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *Directory {
 	var obj Directory
-	obj.InitSCO("directory")
+	obj.InitSCO(objects.TypeDirectory)
 	return &obj
+}
+
+func (o *Directory) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	return errors
 }

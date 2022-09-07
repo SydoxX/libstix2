@@ -3,12 +3,12 @@ package file
 import (
 	"strings"
 
-	"github.com/avast/libstix2/datatypes/hex"
-	"github.com/avast/libstix2/datatypes/timestamp"
-	"github.com/avast/libstix2/objects"
-	"github.com/avast/libstix2/objects/common"
-	"github.com/avast/libstix2/objects/factory"
-	"github.com/avast/libstix2/objects/properties"
+	"github.com/nextpart/libstix2/datatypes/hex"
+	"github.com/nextpart/libstix2/datatypes/timestamp"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/objects/common"
+	"github.com/nextpart/libstix2/objects/factory"
+	"github.com/nextpart/libstix2/objects/properties"
 )
 
 type FileHashes struct {
@@ -42,15 +42,15 @@ func init() {
 	})
 }
 
-func (o *File) FixupIdContributingProperties(properties map[string]interface{}) {
-	hashes, ok := properties["hashes"].(map[string]interface{})
+func (o *File) FixupIdContributingProperties(properties map[string]any) {
+	hashes, ok := properties["hashes"].(map[string]any)
 	if !ok {
 		return
 	}
 
 	for _, algo := range [...]string{"MD5", "SHA-1", "SHA-256", "SHA-512"} {
 		if val, prs := hashes[algo]; prs {
-			properties["hashes"] = map[string]interface{}{
+			properties["hashes"] = map[string]any{
 				algo: val,
 			}
 			return

@@ -6,7 +6,10 @@
 package autonomoussystem
 
 import (
-	"github.com/freetaxii/libstix2/objects"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/objects/common"
+	"github.com/nextpart/libstix2/objects/factory"
+	"github.com/nextpart/libstix2/objects/properties"
 )
 
 // ----------------------------------------------------------------------
@@ -14,38 +17,32 @@ import (
 // ----------------------------------------------------------------------
 
 /*
-DomainName - This type implements the STIX 2 Domain Name SCO and defines
+AutonomousSystem - This type implements the STIX 2 Autonomous System SCO and defines
 all of the properties and methods needed to create and work with this object.
 All of the methods not defined local to this type are inherited from the
 individual properties.
 */
 type AutonomousSystem struct {
-	objects.CommonObjectProperties
+	common.CommonObjectProperties
 	Number int `json:"number,omitempty" bson:"number,omitempty"`
-	objects.NameProperty
+	properties.NameProperty
 	Rir string `json:"rir,omitempty" bson:"rir,omitempty"`
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *AutonomousSystem) GetPropertyList() []string {
-	return []string{"number", "name", "rir"}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeAutonomousSystem, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX Domain Name SCO and return it as a
-pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *AutonomousSystem {
 	var obj AutonomousSystem
-	obj.InitSCO("autonomous-system")
+	obj.InitSCO(objects.TypeAutonomousSystem)
 	return &obj
+}
+
+func (o *AutonomousSystem) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	return errors
 }

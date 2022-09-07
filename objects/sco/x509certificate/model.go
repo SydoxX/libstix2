@@ -6,7 +6,10 @@
 package x509certificate
 
 import (
-	"github.com/freetaxii/libstix2/objects"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/objects/common"
+	"github.com/nextpart/libstix2/objects/factory"
+	"github.com/nextpart/libstix2/objects/properties"
 )
 
 // ----------------------------------------------------------------------
@@ -14,14 +17,14 @@ import (
 // ----------------------------------------------------------------------
 
 /*
-X509Certificate - This type implements the STIX 2 Domain Name SCO and defines
+X509Certificate - This type implements the STIX 2 X509Certificate SCO and defines
 all of the properties and methods needed to create and work with this object.
 All of the methods not defined local to this type are inherited from the
 individual properties.
 */
 type X509Certificate struct {
-	objects.CommonObjectProperties
-	objects.ValueProperty
+	common.CommonObjectProperties
+	properties.ValueProperty
 	IsSelfSigned              bool              `json:"is_self_signed,omitempty" bson:"is_self_signed,omitempty"`
 	Hashes                    map[string]string `json:"hashes,omitempty" bson:"hashes,omitempty"`
 	Version                   string            `json:"version,omitempty" bson:"version,omitempty"`
@@ -37,40 +40,24 @@ type X509Certificate struct {
 	//TODO add X.509 V3 extension
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *X509Certificate) GetPropertyList() []string {
-	return []string{
-		"value",
-		"is_self_signed",
-		"hashes",
-		"version",
-		"serial_number",
-		"signature_algorithm",
-		"issuer",
-		"validity_not_before",
-		"validity_not_after",
-		"subject",
-		"subject_public_key_algorithm",
-		"subject_public_key_modulus",
-		"subject_public_key_exponent",
-	}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeX509Certificate, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX Domain Name SCO and return it as a
-pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *X509Certificate {
 	var obj X509Certificate
-	obj.InitSCO("x509-certificate")
+	obj.InitSCO(objects.TypeX509Certificate)
 	return &obj
+}
+
+func (o *X509Certificate) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	if err := o.ValueProperty.VerifyExists(); err != nil {
+		errors = append(errors, err)
+	}
+
+	return errors
 }

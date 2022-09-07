@@ -8,8 +8,8 @@ package common
 import (
 	"encoding/json"
 
-	"github.com/avast/libstix2/objects"
-	"github.com/avast/libstix2/objects/properties"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/objects/properties"
 )
 
 // ----------------------------------------------------------------------

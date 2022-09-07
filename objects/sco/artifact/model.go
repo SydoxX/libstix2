@@ -6,7 +6,10 @@
 package artifact
 
 import (
-	"github.com/freetaxii/libstix2/objects"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/objects/common"
+	"github.com/nextpart/libstix2/objects/factory"
+	"github.com/nextpart/libstix2/objects/sco/file"
 )
 
 // ----------------------------------------------------------------------
@@ -20,42 +23,29 @@ All of the methods not defined local to this type are inherited from the
 individual properties.
 */
 type Artifact struct {
-	objects.CommonObjectProperties
-	MimeType   string `json:"mime_type,omitempty" bson:"mime_type,omitempty"`
-	PayloadBin string `json:"payload_bin,omitempty" bson:"payload_bin,omitempty"`
-	Url        string `json:"url,omitempty" bson:"url,omitempty"`
-	objects.HashesProperty
-	EncryptionAlgorithm string `json:"encryption_algorithm,omitempty" bson:"encryption_algorithm,omitempty"`
-	DecryptionKey       string `json:"decryption_key,omitempty" bson:"decryption_key,omitempty"`
+	common.CommonObjectProperties
+	MimeType            string           `json:"mime_type,omitempty" bson:"mime_type,omitempty"`
+	PayloadBin          string           `json:"payload_bin,omitempty" bson:"payload_bin,omitempty"`
+	Url                 string           `json:"url,omitempty" bson:"url,omitempty"`
+	Hashes              *file.FileHashes `json:"hashes,omitempty" idcontrib:"1"`
+	EncryptionAlgorithm string           `json:"encryption_algorithm,omitempty" bson:"encryption_algorithm,omitempty"`
+	DecryptionKey       string           `json:"decryption_key,omitempty" bson:"decryption_key,omitempty"`
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *Artifact) GetPropertyList() []string {
-	return []string{
-		"mime_type",
-		"payload_bin",
-		"url",
-		"hashes",
-		"encryption_algorithm",
-		"decryption_key",
-	}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeArtifact, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX File SCO and return it as a
-pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *Artifact {
 	var obj Artifact
-	obj.InitSCO("artifact")
+	obj.InitSCO(objects.TypeArtifact)
 	return &obj
+}
+
+func (o *Artifact) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	return errors
 }

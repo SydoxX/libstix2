@@ -6,7 +6,10 @@
 package useraccount
 
 import (
-	"github.com/freetaxii/libstix2/objects"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/objects/common"
+	"github.com/nextpart/libstix2/objects/factory"
+	"github.com/nextpart/libstix2/objects/properties"
 )
 
 // ----------------------------------------------------------------------
@@ -20,8 +23,8 @@ All of the methods not defined local to this type are inherited from the
 individual properties.
 */
 type UserAccount struct {
-	objects.CommonObjectProperties
-	objects.ExtensionsProperty
+	common.CommonObjectProperties
+	properties.ExtensionsProperty
 	UserId                string `json:"user_id,omitempty" bson:"user_id,omitempty"`
 	Credential            string `json:"credential,omitempty" bson:"credential,omitempty"`
 	AccountLogin          string `json:"account_login,omitempty" bson:"account_login,omitempty"`
@@ -63,17 +66,20 @@ func (o *UserAccount) GetPropertyList() []string {
 	}
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
+func init() {
+	factory.RegisterObjectCreator(objects.TypeUserAccount, func() common.STIXObject {
+		return New()
+	})
+}
 
-/*
-New - This function will create a new STIX UserAccount SCO and return it as a
-pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *UserAccount {
 	var obj UserAccount
-	obj.InitSCO("user-account")
+	obj.InitSCO(objects.TypeUserAccount)
 	return &obj
+}
+
+func (o *UserAccount) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	return errors
 }

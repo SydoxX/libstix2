@@ -17,7 +17,7 @@ type PropertyMissingError struct {
 
 type PropertyInvalidValueError struct {
 	PropertyError
-	Value interface{}
+	Value any
 }
 
 func PropertyMissing(propertyName string) error {
@@ -29,7 +29,7 @@ func PropertyMissing(propertyName string) error {
 	}
 }
 
-func PropertyInvalid(propertyName string, value interface{}, extraInfo string) error {
+func PropertyInvalid(propertyName string, value any, extraInfo string) error {
 	return &PropertyInvalidValueError{
 		PropertyError: PropertyError{
 			PropertyName: propertyName,

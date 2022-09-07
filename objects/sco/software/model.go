@@ -6,7 +6,10 @@
 package software
 
 import (
-	"github.com/freetaxii/libstix2/objects"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/objects/common"
+	"github.com/nextpart/libstix2/objects/factory"
+	"github.com/nextpart/libstix2/objects/properties"
 )
 
 // ----------------------------------------------------------------------
@@ -20,40 +23,28 @@ All of the methods not defined local to this type are inherited from the
 individual properties.
 */
 type Software struct {
-	objects.CommonObjectProperties
-	objects.NameProperty
+	common.CommonObjectProperties
+	properties.NameProperty
 	Cpe       string   `json:"cpe,omitempty" bson:"cpe,omitempty"`
 	Languages []string `json:"languages,omitempty" bson:"languages,omitempty"`
 	Vendor    string   `json:"vendor,omitempty" bson:"vendor,omitempty"`
 	Version   string   `json:"version,omitempty" bson:"version,omitempty"`
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *Software) GetPropertyList() []string {
-	return []string{
-		"name",
-		"cpe",
-		"languages",
-		"vendor",
-		"version",
-	}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeSoftware, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX Software SCO and return it as a
-pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *Software {
 	var obj Software
-	obj.InitSCO("software")
+	obj.InitSCO(objects.TypeSoftware)
 	return &obj
+}
+
+func (o *Software) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	return errors
 }

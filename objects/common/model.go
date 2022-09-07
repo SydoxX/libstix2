@@ -8,12 +8,10 @@ package common
 import (
 	"encoding/json"
 	"fmt"
-
-	"github.com/avast/libstix2/datatypes/timestamp"
-	"github.com/avast/libstix2/objects"
-
-	"github.com/avast/libstix2/defs"
-	"github.com/avast/libstix2/objects/properties"
+	"github.com/nextpart/libstix2/datatypes/timestamp"
+	"github.com/nextpart/libstix2/defs"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/objects/properties"
 )
 
 // ----------------------------------------------------------------------

@@ -6,7 +6,7 @@
 package properties
 
 import (
-	"github.com/avast/libstix2/datatypes/timestamp"
+	"github.com/nextpart/libstix2/datatypes/timestamp"
 )
 
 // ----------------------------------------------------------------------

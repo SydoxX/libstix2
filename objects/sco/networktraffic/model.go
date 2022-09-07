@@ -6,7 +6,10 @@
 package networktraffic
 
 import (
-	"github.com/freetaxii/libstix2/objects"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/objects/common"
+	"github.com/nextpart/libstix2/objects/factory"
+	"github.com/nextpart/libstix2/objects/properties"
 )
 
 // ----------------------------------------------------------------------
@@ -20,8 +23,8 @@ All of the methods not defined local to this type are inherited from the
 individual properties.
 */
 type NetworkTraffic struct {
-	objects.CommonObjectProperties
-	objects.ExtensionsProperty
+	common.CommonObjectProperties
+	properties.ExtensionsProperty
 	Start             string            `json:"start,omitempty" bson:"start,omitempty"`
 	End               string            `json:"end,omitempty" bson:"end,omitempty"`
 	IsActive          bool              `json:"is_active,omitempty" bson:"is_active,omitempty"`
@@ -41,45 +44,20 @@ type NetworkTraffic struct {
 	EncapsulatedByRef string            `json:"encapsulated_by_ref,omitempty" bson:"encapsulated_by_ref,omitempty"`
 }
 
-/*
-GetPropertyList - This method will return a list of all of the properties that
-are unique to this object. This is used by the custom UnmarshalJSON for this
-object. It is defined here in this file to make it easy to keep in sync.
-*/
-func (o *NetworkTraffic) GetPropertyList() []string {
-	return []string{
-		"extensions",
-		"start",
-		"end",
-		"is_active",
-		"src_ref",
-		"dst_ref",
-		"src_port",
-		"dst_port",
-		"protocols",
-		"src_byte_count",
-		"dst_byte_count",
-		"src_packets",
-		"dst_packets",
-		"ipfix",
-		"src_payload_ref",
-		"dst_payload_ref",
-		"encapsulates_ref",
-		"encapsulated_by_ref",
-	}
+func init() {
+	factory.RegisterObjectCreator(objects.TypeNetworkTraffic, func() common.STIXObject {
+		return New()
+	})
 }
 
-// ----------------------------------------------------------------------
-// Initialization Functions
-// ----------------------------------------------------------------------
-
-/*
-New - This function will create a new STIX Domain Name SCO and return it as a
-pointer. It will also initialize the object by setting all of the basic
-properties.
-*/
 func New() *NetworkTraffic {
 	var obj NetworkTraffic
-	obj.InitSCO("network-traffic")
+	obj.InitSCO(objects.TypeNetworkTraffic)
 	return &obj
+}
+
+func (o *NetworkTraffic) Valid() []error {
+	errors := o.CommonObjectProperties.ValidSDO()
+
+	return errors
 }

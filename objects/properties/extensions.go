@@ -4,28 +4,28 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/avast/libstix2/datatypes/stixid"
-	"github.com/avast/libstix2/objects"
-	"github.com/avast/libstix2/vocabs"
+	"github.com/nextpart/libstix2/datatypes/stixid"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/vocabs"
 )
 
 type ExtensionsProperty struct {
-	Extensions map[string]interface{} `json:"extensions,omitempty" idcontrib:"1"`
+	Extensions map[string]any `json:"extensions,omitempty" idcontrib:"1"`
 }
 
-func (p *ExtensionsProperty) NewExtensionGeneric(name string) map[string]interface{} {
+func (p *ExtensionsProperty) NewExtensionGeneric(name string) map[string]any {
 	if p.Extensions == nil {
-		p.Extensions = make(map[string]interface{})
+		p.Extensions = make(map[string]any)
 	}
 
-	extension := map[string]interface{}{}
+	extension := map[string]any{}
 	p.Extensions[name] = extension
 	return extension
 }
 
-func (p *ExtensionsProperty) AddExtension(name string, val interface{}) {
+func (p *ExtensionsProperty) AddExtension(name string, val any) {
 	if p.Extensions == nil {
-		p.Extensions = make(map[string]interface{})
+		p.Extensions = make(map[string]any)
 	}
 	p.Extensions[name] = val
 }
@@ -41,15 +41,15 @@ func (p *ExtensionsProperty) Valid() error {
 			continue
 		}
 
-		// the val might be anything, not just map[string]interface{}...
+		// the val might be anything, not just map[string]any...
 		valMarshalled, err := json.Marshal(&val)
 		if err != nil {
-			return fmt.Errorf("failed to marshal %s value: %w", name, val)
+			return fmt.Errorf("failed to marshal %s value: %s", name, val)
 		}
 
 		var extVal extensionValue
 		if err := json.Unmarshal(valMarshalled, &extVal); err != nil {
-			return fmt.Errorf("failed to unmarshal %s value: %w", name, val)
+			return fmt.Errorf("failed to unmarshal %s value: %s", name, val)
 		}
 
 		if !extVal.ExtensionType.IsValid() {

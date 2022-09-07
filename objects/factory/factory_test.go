@@ -3,13 +3,13 @@ package factory_test
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/nextpart/libstix2/objects/sdo/bundle"
 	"testing"
 
 	"github.com/yudai/gojsondiff/formatter"
 
-	"github.com/avast/libstix2/objects/bundle"
-	_ "github.com/avast/libstix2/objects/factory/importall"
 	"github.com/gowebpki/jcs"
+	_ "github.com/nextpart/libstix2/objects/factory/importall"
 	"github.com/yudai/gojsondiff"
 )
 
@@ -48,7 +48,7 @@ func TestDecode(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		var baseJson map[string]interface{}
+		var baseJson map[string]any
 		if err := json.Unmarshal(expectedNormalized, &baseJson); err != nil {
 			t.Fatal(err)
 		}

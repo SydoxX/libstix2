@@ -6,7 +6,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/avast/libstix2/objects"
+	"github.com/nextpart/libstix2/objects"
 )
 
 const IdContribTagName = "idcontrib"

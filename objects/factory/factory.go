@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/avast/libstix2/objects"
-	"github.com/avast/libstix2/objects/common"
+	"github.com/nextpart/libstix2/objects"
+	"github.com/nextpart/libstix2/objects/common"
 )
 
 var objectCreators = map[objects.ObjectType]func() common.STIXObject{}
